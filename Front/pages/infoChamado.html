@@ -148,7 +148,7 @@
             const idCall = localStorage.getItem('idCall');
             console.log(idCall);
 
-            fetch(`http://localhost:3000/call/${idCall}`)
+            fetch(`http://10.116.81.5:3000/call/${idCall}`)
                 .then(response => {
                     if (response.status === 200) {
                         return response.json(); // Retorna o JSON para a próxima then
@@ -167,7 +167,7 @@
                         inputSala.value = call[0].sala;
                         descricao.value = call[0].text;
 
-                        fetch(`http://localhost:3000/getImage/${call[0].id_image}`)
+                        fetch(`http://10.116.81.5:3000/getImage/${call[0].id_image}`)
                             .then(response => {
                                 if (response.ok) {
                                     return response.blob(); // Obtém a imagem como um Blob
@@ -201,7 +201,7 @@
             const inputSala = document.querySelector("#inputRespon").value;
             const descricao = document.getElementById('descricao').value;
 
-            fetch(`http://localhost:3000/call/updateCall`, {
+            fetch(`http://10.116.81.5:3000/call/updateCall`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ inputSala, descricao, idCall })
@@ -213,7 +213,7 @@
                         console.log(inputSala);
                         console.log(descricao);
                         console.log(idCall);
-                        window.location.href = "http://localhost:13542/Front/pages/openCalls.html";
+                        window.location.href = "http://10.116.81.5:13542/Front/pages/openCalls.html";
                         // return response.json();
                     } else {
                         alert('Erro ao atualizar a tarefa');
@@ -240,7 +240,7 @@
 
         btnAdicionar.addEventListener('click', () => {
             // deleteCall()
-            window.location.href = "http://localhost:13542/Front/pages/addTask.html?source=infoChamado";
+            window.location.href = "http://10.116.81.5:13542/Front/pages/addTask.html?source=infoChamado";
         })
     </script>
 

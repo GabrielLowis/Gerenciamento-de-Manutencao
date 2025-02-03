@@ -17,7 +17,7 @@
 
     <main id="mainTaskManager">
         <div id="containerAllTask">
-            <section>
+            <section id="sectionHeader">
                 <div id="headerAllTask">
                     <h1 id="title">Suas tarefas</h1>
                     <a href="./addTask.html?source=taskColab"><i class="bi bi-clipboard2-plus-fill"></i> Adicionar tarefa</a>
@@ -25,7 +25,6 @@
                         <a href="../index.html">
                             <h3>Sair</h3>
                         </a>
-                        <i class="bi bi-x-square-fill"></i>
                     </div>
                 </div>
 
@@ -107,7 +106,7 @@
         }
 
         function getUserName(idUser) {
-            fetch(`http://localhost:3000/user/${idUser}`)
+            fetch(`http://10.116.81.5:3000/user/${idUser}`)
                 .then(response => {
                     if (response.status === 200) {
                         // console.log(response.json());
@@ -129,7 +128,7 @@
 
         // ----------------------------
         function getTask(username) {
-            fetch(`http://localhost:3000/tasks`)
+            fetch(`http://10.116.81.5:3000/tasks`)
                 .then(response => {
                     if (response.status === 200) {
                         return response.json();

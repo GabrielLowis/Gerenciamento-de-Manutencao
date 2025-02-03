@@ -8,6 +8,36 @@
     <script type="module" src="../scripts/index.js" defer></script>
     <link rel="stylesheet" href="../styles.css">
     <title>Documentt</title>
+
+    <style>
+        th,
+        td {
+            border-right: 1px solid black;
+            /* padding: 8px; */
+            position: relative;
+        }
+
+        th {
+            /* background: #f4f4f4; */
+            position: relative;
+        }
+
+        .resizer {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 5px;
+            height: 100%;
+            cursor: col-resize;
+            background: transparent;
+        }
+
+        .resizer:hover {
+            background: gray;
+        }
+    </style>
+
+
 </head>
 
 <body>
@@ -25,9 +55,10 @@
         <div id="containerAllTask">
             <section id="sectionHeader">
                 <div id="headerAllTask">
-                    <h1>Tarefas - Unidade 3º</h1>
+                    <h1>Tarefas - Unidade 123</h1>
                     <div id="linksHeader">
-                        <a href="./addTask.html?source=taskManager"><i class="bi bi-clipboard2-plus-fill"></i> Adicionar tarefa</a>
+                        <a href="./addTask.html?source=taskManager"><i class="bi bi-clipboard2-plus-fill"></i> Adicionar
+                            tarefa</a>
                         <a href="./openCalls.html"><i class="bi bi-card-checklist"></i> Chamados Abertos</a>
                     </div>
                 </div>
@@ -45,14 +76,19 @@
 
             <section id="tableTasks">
                 <table id="tasks">
-                    <tr id="tableTitle">
-                        <th class="tarefas"> <i class="bi bi-journal-check"></i> Tarefas </th>
-                        <th class="status"> <i class="bi bi-hourglass-split"></i> Status </th>
-                        <th class="responsavel"> <i class="bi bi-file-person-fill"></i> Responsável </th>
-                        <th class="prazo"> <i class="bi bi-calendar-week-fill"></i> Prazo </th>
-                        <th class="prioridade"> <i class="bi bi-star-fill"></i> Prioridade </th>
-                        <th class="descricao"> <i class="bi bi-file-earmark-text"></i> Descrição</th>
-                    </tr>
+                    <thead>
+                        <tr id="tableTitle">
+                            <th class="tarefas"><i class="bi bi-journal-check"></i>Tarefas<div class="resizer"></div></th>
+                            <th class="status"><i class="bi bi-hourglass-split"></i>Status<div class="resizer"></div></th>
+                            <th class="responsavel"><i class="bi bi-file-person-fill"></i>Responsável<div class="resizer"></div></th>
+                            <th class="prazo"><i class="bi bi-calendar-week-fill"></i>Prazo<div class="resizer"></div></th>
+                            <th class="prioridade"><i class="bi bi-star-fill"></i>Prioridade<div class="resizer"></div></th>
+                            <th class="descricao"><i class="bi bi-file-earmark-text"></i>Descrição<div class="resizer"></div></th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="tbody">
+                    </tbody>
                 </table>
             </section>
         </div>
@@ -64,5 +100,36 @@
             localStorage.setItem('taskId', id);
         }
     </script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const resizers = document.querySelectorAll(".resizer");
+            resizers.forEach(resizer => {
+                let startX, startWidth, th;
+                resizer.addEventListener("mousedown", (e) => {
+                    th = e.target.parentElement;
+                    startX = e.pageX;
+                    startWidth = th.offsetWidth;
+                    document.addEventListener("mousemove", resize);
+                    document.addEventListener("mouseup", stopResize);
+                });
+                function resize(e) {
+                    const newWidth = startWidth + (e.pageX - startX);
+                    th.style.width = newWidth + "px";
+                }
+                function stopResize() {
+                    document.removeEventListener("mousemove", resize);
+                    document.removeEventListener("mouseup", stopResize);
+                }
+            });
+        });
+
+        function resetTable() {
+            document.querySelectorAll("th").forEach(th => {
+                th.style.width = "";
+            });
+        }
+    </script>
 </body>
-</html>
+
+</html> 

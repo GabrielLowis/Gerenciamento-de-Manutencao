@@ -94,7 +94,7 @@
             formData.append("image", selectedFile); // Envia apenas a imagem
 
             try {
-                const response = await fetch("http://localhost:3000/upload-image", {
+                const response = await fetch("http://10.116.81.5:3000/upload-image", {
                     method: "POST",
                     body: formData,
                 });
@@ -112,7 +112,7 @@
             }
 
             try {
-                const response = await fetch(`http://localhost:3000/createCall/`, {
+                const response = await fetch(`http://10.116.81.5:3000/createCall/`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ imageId, inputSala, descricao }),

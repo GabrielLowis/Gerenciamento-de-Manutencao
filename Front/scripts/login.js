@@ -1,6 +1,7 @@
 const btnEntrar = document.querySelector('#btnEntrar');
 
 let id = 0;
+let nivel = 0;
 export let inputEmail = 0;
 
 function callLogin() {
@@ -20,7 +21,7 @@ if (btnEntrar) {
 
 function getUserTask(username, passwrd){
 
-    fetch(`http://localhost:3000/users/${username}`)
+    fetch(`http://10.116.81.5:3000/users/${username}`)
     .then(response => {
         if (response.status === 200) {
             return response.json();
@@ -29,27 +30,29 @@ function getUserTask(username, passwrd){
         }
     })
     .then(dados => {
-        if (dados.length === 0) {
-            console.log('Não existe esse usuario');
+        if (dados.length === 0) {   
+            alert('Não existe esse usuario')
         } else {
             const senha = dados[0].passwrd;
 
             if (senha === passwrd) {
                 console.log("Senha correta");
                 id = dados[0].id;
+                nivel = dados[0].nivel
 
                 localStorage.setItem('idUser', id);
+                localStorage.setItem('nivel', nivel)
 
                 if (dados[0].nivel === 1) {
-                    window.location.href = 'http://localhost:13542/Front/pages/taskManager.html';
+                    window.location.href = 'http://10.116.81.5:13542/Front/pages/taskManager.html';
                 } else if (dados[0].nivel === 2) {
-                    window.location.href = 'http://localhost:13542/Front/pages/taskColab.html';
+                    window.location.href = 'http://10.116.81.5:13542/Front/pages/taskColab.html';
                 }
                 
                 
 
             } else {
-                console.log("Senha errada");   
+                alert('Senha INCORRETA')
             }
 
            

@@ -40,10 +40,18 @@ app.get("/tasks", (req, res) => {
     });
 });
 
+// ---------------------------------
+app.get("/usersColab/", (req, res) => {
+    connection.query("SELECT username FROM users WHERE nivel = 2", (err, results) => {
+        if (err) {
+            return res.status(500).send('MySQL Connection error');
+        }
+        res.json(results);
+    });
+});
 
 
 // -------------------------------------
-
 app.get("/users/:username", (req, res) => {
     connection.query("SELECT id, passwrd, nivel FROM users WHERE username = ?", [req.params.username], (err, results) => {
         if (err) {
@@ -76,6 +84,20 @@ app.get("/user/:id/tasks/", (req, res) => {
         res.json(results);
     })
 });
+
+// -------------------------------------
+// app.get("/user/:nivel/tasks/", (req, res) => [
+//     connection.query("SELECT * FROM tasks WHERE nivel = ?", [req.params.nivel], (err, result) => {
+//         if (err) {
+//             res.send('MySQL Connection error');
+//             console.log('erro');
+//         }
+
+//         res.json(results);
+//     })
+// ])
+
+
 // -------------------------------------
 
 // Nova rota para pegar informações de uma tarefa de um usuário específico
@@ -103,8 +125,8 @@ app.get("/user/:id/tasks/:taskId", (req, res) => {
 // -------------------------------------
 app.post("/tasks/updateTask", (req, res) => {
     connection.query(
-        "UPDATE tasks SET task_title = ?, task_status = ?, task_prior = ?, task_prazo = ?, task_sala = ?, task_respon = ?, task_text = ?, updated_at = NOW() WHERE id = ?",
-        [req.body.inputTitle, req.body.statusSpan, req.body.prioSpan, req.body.inputData, req.body.inputSala, req.body.inputRespon, req.body.descricao, req.body.idTask],
+        "UPDATE tasks SET task_title = ?, task_status = ?, task_prior = ?, task_prazo = ?, task_sala = ?, task_respon = ?, task_text = ?, id_image = ?, updated_at = NOW() WHERE id = ?",
+        [req.body.inputTitle, req.body.statusSpan, req.body.prioSpan, req.body.inputData, req.body.inputSala, req.body.inputRespon, req.body.descricao, req.body.idImage, req.body.idTask],
         (err, results) => {
             if (err) {
                 console.error('MySQL Connection error:', err);
@@ -118,11 +140,11 @@ app.post("/tasks/updateTask", (req, res) => {
 
 // -------------------------------------
 app.post("/user/:id/tasks/createTask", (req, res) => {
-    const { idUser, inputTitle, statusSpan, prioSpan, inputData, inputSala, inputRespon, descricao } = req.body;
+    const { idUser, inputTitle, statusSpan, prioSpan, inputData, inputSala, inputRespon, descricao, imageId } = req.body;
 
     // Comando SQL para inserir uma nova linha na tabela 'tasks'
-    connection.query("INSERT INTO tasks (id_user, task_title, task_status, task_prior, task_prazo, task_sala, task_respon, task_text, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())",
-        [idUser, inputTitle, statusSpan, prioSpan, inputData, inputSala, inputRespon, descricao],
+    connection.query("INSERT INTO tasks (id_user, task_title, task_status, task_prior, task_prazo, task_sala, task_respon, task_text, id_image, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())",
+        [idUser, inputTitle, statusSpan, prioSpan, inputData, inputSala, inputRespon, descricao, imageId],
         (err, results) => {
             if (err) {
                 console.error('MySQL Connection error:', err);
@@ -152,6 +174,8 @@ app.delete("/user/:id/tasks/:taskId", (req, res) => {
 
 // -------------------------------------
 const multer = require('multer');
+const { get } = require('express/lib/response');
+const res = require('express/lib/response');
 // const path = require('path');
 
 const storage = multer.memoryStorage(); // Usa memória em vez de salvar no disco
@@ -181,6 +205,17 @@ app.post('/upload-image', upload.single('image'), (req, res) => {
         });
     });
 });
+
+// -------------------------------------
+// app.post("/image/updateImage/:imageId", (req, res) => {
+//     connection.query("UPDATE images SET mimetype = ?, image_data = ?, filename = ?, WHERE id = ?", 
+//         [req.body.mimetype, req.body.image_data, req.body.idImage], (err, results) => {
+//         if (err) {
+//             res.send('MySQL Connection error');
+//             console.log('erro');
+//         }
+//     })
+// })
 
 // -------------------------------------
 app.post("/createCall", (req, res) => {
@@ -255,6 +290,22 @@ app.get('/getImage/:imageId', (req, res) => {
         const { mimetype, image_data } = result[0];
         res.setHeader('Content-Type', mimetype); // Define o tipo MIME da resposta
         res.send(image_data); // Envia os dados da imagem como resposta
+    });
+});
+
+// -------------------------------------
+app.delete('/getImage/delete/:imageId', (req, res) => {
+    const { imageId } = req.params;
+
+    connection.query("DELETE FROM images WHERE id = ?", [imageId], (err, results) => {
+        if (err) {
+            console.error("Erro ao deletar a imagem:", err);
+            res.status(500).send("Erro ao deletar a imagem.");
+        } else if (results.affectedRows === 0) { // O affectedRows é uma propriedade do objeto results retornado pelo método query do MySQL em Node.js. Ele indica o número de linhas que foram afetadas por uma consulta SQL no banco de dados. Essa propriedade é útil para verificar o impacto de comandos como UPDATE, DELETE, ou INSERT.
+            res.status(404).send("Imagem não encontrada.");
+        } else {
+            res.json({ message: "Imagem deletada com sucesso!" });
+        }
     });
 });
 

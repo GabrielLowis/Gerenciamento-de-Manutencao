@@ -70,7 +70,10 @@
 
             <div id="addTaskResponsavel" class="addTaskItems">
                 <h3><i class="bi bi-file-person-fill"></i> Responsável</h3>
-                <input id="inputRespon" type="text" placeholder="Vazio">
+                <input id="inputRespon" type="text" placeholder="Vazio" autocomplete="off">
+
+                <div id="selectRespon" style="display: none;">
+                </div>
             </div>
 
             <div id="addTaskPrazo" class="addTaskItems">
@@ -87,6 +90,7 @@
             <a id="addTaskAdicionar" style="cursor: pointer;">Adicionar</a>
         </main>
     </section>
+    
 
     <script>
         document.addEventListener("DOMContentLoaded", () => {
@@ -105,7 +109,7 @@
         });
     </script>
 
-    <script>
+    <!-- <script>
         // Seleciona a imagem e o input file
         const img = document.getElementById("imgUpload");
         const fileInput = document.getElementById("fileInput");
@@ -130,7 +134,7 @@
             }
         });
 
-    </script>
+    </script> -->
 
     <script>
         const iconSelect = document.querySelector("#toggleSelect");
@@ -251,6 +255,52 @@
     </script>
 
     <script>
+        const selectRespon = document.querySelector("#selectRespon");
+        const inputRespon = document.getElementById("inputRespon");
+
+        fetch(`http://10.116.81.5:3000/usersColab`)
+            .then(response => {
+                if (response.status === 200) {
+                    return response.json(); // Retorna o JSON para a próxima then
+                } else {
+                    console.error('Erro na resposta da API:', response.status);
+                    throw new Error('Erro ao buscar dados'); // Lança erro para ser tratado no catch
+                }
+            })
+            .then(users => {
+                // Preencher os spans com os usernames
+                users.forEach(user => {
+                    selectRespon.innerHTML += `<span onclick="document.getElementById('inputRespon').value = this.innerText;">${user.username}</span>`;
+                });
+            })
+            .catch(error => {
+                console.error(error);
+            });
+
+        inputRespon.addEventListener("click", () => {
+            // Alterna o display do selectRespon
+            selectRespon.style.display = selectRespon.style.display === 'flex' ? 'none' : 'flex';
+        });
+
+        // Fecha o selectRespon se clicar fora dele
+        document.addEventListener("click", (event) => {
+            // Verifica se o clique foi fora do inputRespon ou selectRespon
+            if (!selectRespon.contains(event.target) && event.target !== inputRespon) {
+                selectRespon.style.display = 'none';
+            }
+        });
+
+        // Adiciona o evento de clique para os spans já adicionados
+        selectRespon.addEventListener("click", (event) => {
+            if (event.target.tagName.toLowerCase() === "span") {
+                inputRespon.value = event.target.innerText; // Coloca o texto do span no input
+                selectRespon.style.display = 'none'; // Fecha o selectRespon
+            }
+        });
+
+    </script>
+
+    <script>
         // Obtendo os parâmetros da URL
         const urlParams = new URLSearchParams(window.location.search);
 
@@ -259,14 +309,13 @@
             callToTask();
         }
 
-
         function callToTask() {
             console.log("Usuário veio de infoCall!");
 
             const idCall = localStorage.getItem('idCall');
             console.log(idCall);
 
-            fetch(`http://localhost:3000/call/${idCall}`)
+            fetch(`http://10.116.81.5:3000/call/${idCall}`)
                 .then(response => {
                     if (response.status === 200) {
                         return response.json(); // Retorna o JSON para a próxima then
@@ -287,13 +336,15 @@
 
                         const idImage = call[0].id_image;
 
-                        console.log(idImage);
-                        
+                        localStorage.setItem("idImage", idImage);
+
+                        console.log('IDIMG:' + idImage);
+
                         // localStorage.setItem('idImage', idImage);
 
-                        
 
-                        fetch(`http://localhost:3000/getImage/${call[0].id_image}`)
+
+                        fetch(`http://10.116.81.5:3000/getImage/${call[0].id_image}`)
                             .then(response => {
                                 if (response.ok) {
                                     return response.blob(); // Obtém a imagem como um Blob
@@ -305,6 +356,7 @@
                                 const url = URL.createObjectURL(blob); // Cria uma URL para o Blob
                                 const imgTag = document.querySelector("#imgUpload");
                                 imgTag.src = url; // Define o src da tag <img>
+
                             })
                             .catch(error => {
                                 console.error("Erro ao carregar a imagem:", error);

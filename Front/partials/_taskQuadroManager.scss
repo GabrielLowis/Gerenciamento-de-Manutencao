@@ -8,6 +8,10 @@
     // overflow-y: auto; 
 }
 
+#sectionHeaderQuadro{
+    margin: 15px;
+}
+
 /* Container que engloba as tarefas e o conteúdo principal */
 #containerAllTask {
     width: 95%;
@@ -383,7 +387,7 @@ span.arquivada{
     }
     
     .quadroManager{
-        padding: 25px 0 25px 4px !important;
+        padding: 25px 0 85px 4px !important;
     }
 }
 

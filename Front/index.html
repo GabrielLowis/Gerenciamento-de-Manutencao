@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,6 +9,7 @@
     <script type="module" src="./scripts/login.js" defer></script>
     <title>Document</title>
 </head>
+
 <body>
     <header>
         <img src="https://logodownload.org/wp-content/uploads/2016/10/sesi-logo.png" alt="Logo do Sesi">
@@ -18,16 +20,36 @@
             <h1>Login</h1>
             <div id="input1">
                 <i class="bi bi-envelope-fill"></i>
-                <input id="inputEmail" type="text" placeholder="Email / CPF">
+                <input id="inputEmail" type="text" placeholder="Usuário" autocomplete="off" autocorrect="off" spellcheck="false" autocapitalize="off">
             </div>
             <div id="input2">
                 <i class="bi bi-lock-fill"></i>
                 <input id="inputSenha" type="password" placeholder="Senha">
+                <i class="bi bi-eye-slash" style="cursor: pointer;"></i>
             </div>
             <button id="btnEntrar">ENTRAR</button>
 
             <p id="resultados"></p>
         </div>
     </main>
+
+    <script>
+        iconEyes = document.querySelector(".bi-eye-slash");
+        inputSenha = document.getElementById("inputSenha");
+
+        iconEyes.addEventListener("click", () => {
+            if (inputSenha.type === "password") {
+                inputSenha.type = "text";
+                iconEyes.classList.remove("bi-eye-slash");
+                iconEyes.classList.add("bi-eye-fill");
+            } else {
+                inputSenha.type = "password";
+                iconEyes.classList.remove("bi-eye-fill");
+                iconEyes.classList.add("bi-eye-slash");
+            }
+        })
+
+    </script>
 </body>
+
 </html>

@@ -1,9 +1,81 @@
 let idUser = localStorage.getItem('idUser');
 
 // ----------------------------
+const img = document.getElementById("imgUpload");
+const fileInput = document.getElementById("fileInput");
+const addTaskAdicionar = document.getElementById("addTaskAdicionar");
+
+let selectedFile = null;
+let imageId = null;
+
+// Clique na imagem para abrir o input de arquivo
+img.addEventListener("click", () => fileInput.click());
+
+// Atualiza a imagem localmente
+fileInput.addEventListener("change", (event) => {
+    selectedFile = event.target.files[0]; // Armazena o arquivo selecionado
+    if (selectedFile) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            img.src = e.target.result; // Atualiza a imagem localmente
+        };
+        reader.readAsDataURL(selectedFile);
+    }
+});
+
+// Clique no link "Adicionar"
+addTaskAdicionar.addEventListener("click", async (event) => {
+    event.preventDefault(); // Impede o comportamento padrão do link
+
+    const urlParams = new URLSearchParams(window.location.search);
+
+    // Verifica se o parâmetro 'source' tem o valor 'openCalls'
+    if (urlParams.get('source') === 'infoChamado') {
+        const idImg = localStorage.getItem('idImage');
+        imageId = idImg
+        console.log('idImagem:' + imageId);
+        createTask(idUser);
+    } else {
+        if (!selectedFile) {
+            alert("Por favor, selecione uma imagem.");
+            return;
+        }
+    
+        // Cria o FormData com a imagem
+        const formData = new FormData();
+        formData.append("image", selectedFile); // Envia apenas a imagem
+    
+        try {
+            const response = await fetch("http://10.116.81.5:3000/upload-image", {
+                method: "POST",
+                body: formData,
+            });
+    
+            if (response.ok) {
+                const result = await response.json();
+                imageId = result.imageId; // Armazena o ID na variável global
+                // alert("Imagem enviada com sucesso! ID: " + imageId);
+                console.log("imagem: " + imageId);
+    
+                createTask(idUser);
+    
+            } else {
+                alert("Erro ao enviar imagem.");
+            }
+        } catch (error) {
+            console.error("Erro ao conectar ao servidor:", error);
+            alert("Err  o ao enviar a imagem.");
+        }
+    }
+});
+
+
+
+
+// ----------------------------
 function createTask(idUser) {
     console.log(idUser);
-    
+
 
     let inputTitle = document.getElementById("inputNameTask").value;
 
@@ -28,24 +100,25 @@ function createTask(idUser) {
     let descricao = document.getElementById("descricao").value;
 
     // Fazer a requisição para criar uma nova tarefa
-    fetch(`http://localhost:3000/user/${idUser}/tasks/createTask/`, {
+    fetch(`http://10.116.81.5:3000/user/${idUser}/tasks/createTask/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ idUser, inputTitle, statusSpan, prioSpan, inputData, inputSala, inputRespon, descricao })
+        body: JSON.stringify({ idUser, inputTitle, statusSpan, prioSpan, inputData, inputSala, inputRespon, descricao, imageId })
     })
         .then(response => {
             if (response.status === 200) {
+                console.log('teste imagem: ' + imageId);
                 alert('Tarefa criada com sucesso');
 
                 const urlParams = new URLSearchParams(window.location.search);
 
                 // Verifica se o parâmetro 'source' tem o valor 'taskManager'
                 if (urlParams.get('source') === 'taskManager') {
-                    window.location.href = 'http://localhost:13542/Front/pages/taskManager.html';
+                    window.location.href = 'http://10.116.81.5:13542/Front/pages/taskManager.html';
                 }
 
                 if (urlParams.get('source') === 'taskColab') {
-                    window.location.href = 'http://localhost:13542/Front/pages/taskColab.html';
+                    window.location.href = 'http://10.116.81.5:13542/Front/pages/taskColab.html';
                 }
 
                 return response.json();
@@ -62,7 +135,7 @@ function createTask(idUser) {
 function deleteCall() {
     const idCall = localStorage.getItem('idCall');
 
-    fetch(`http://localhost:3000/call/deleteCall/${idCall}`, {
+    fetch(`http://10.116.81.5:3000/call/deleteCall/${idCall}`, {
         method: "DELETE",
     })
         .then((response) => {
@@ -90,13 +163,11 @@ document.getElementById('addTaskAdicionar').addEventListener('click', () => {
 
     // Verifica se o parâmetro 'source' tem o valor 'openCalls'
     if (urlParams.get('source') === 'infoChamado') {
-        createTask(idUser);
+        // createTask(idUser);
         deleteCall()
-
-        window.location.href = 'http://localhost:13542/Front/pages/openCalls.html';
-    } else {
-        createTask(idUser);
+            
+        window.location.href = 'http://10.116.81.5:13542/Front/pages/openCalls.html';
     }
-    
+
 });
 

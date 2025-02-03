@@ -1,6 +1,33 @@
 let idUser = localStorage.getItem('idUser');
 let idTask;
 
+
+
+const img = document.getElementById("imgUpload");
+const fileInput = document.getElementById("fileInput");
+const addTaskAdicionar = document.getElementById("addTaskAdicionar");
+let selectedFile = null;
+let idImage = null;
+
+
+
+// Clique na imagem para abrir o input de arquivo
+img.addEventListener("click", () => fileInput.click());
+
+// Atualiza a imagem localmente
+fileInput.addEventListener("change", (event) => {
+    selectedFile = event.target.files[0]; // Armazena o arquivo selecionado
+    if (selectedFile) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            img.src = e.target.result; // Atualiza a imagem localmente
+        };
+        reader.readAsDataURL(selectedFile);
+    }
+});
+
+
+
 window.onload = function () {
     idTask = localStorage.getItem('taskId');
     console.log(idTask);
@@ -11,7 +38,7 @@ window.onload = function () {
 
 // ----------------------------
 export function getTask(idUser, idTask) {
-    fetch(`http://localhost:3000/user/${idUser}/tasks/${idTask}`)
+    fetch(`http://10.116.81.5:3000/user/${idUser}/tasks/${idTask}`)
         .then(response => {
             if (response.status === 200) {
                 console.log('funcionou');
@@ -26,7 +53,7 @@ export function getTask(idUser, idTask) {
                 console.log('Não existe');
             } else {
                 console.log(tarefa);
-                
+
                 const inputTitle = document.getElementById("inputNameTask");
                 inputTitle.value = tarefa.task_title;
 
@@ -55,36 +82,39 @@ export function getTask(idUser, idTask) {
                 const descricao = document.getElementById("descricao");
                 descricao.value = tarefa.task_text;
 
-                // console.log(tarefa.id_image);
-                
+
+
+                console.log(tarefa.id_image + "<-----");
+
+                idImage = tarefa.id_image;
+
 
                 return tarefa;
             }
         })
         .then(image => {
             // console.log(image.id_image);
-            
-                fetch(`http://localhost:3000/getImage/${image.id_image}`)
-                    .then(response => {
-                        if (response.ok) {
-                            return response.blob(); // Obtém a imagem como um Blob
-                        } else {
-                            throw new Error("Erro ao buscar a imagem");
-                        }
-                    })
-                    .then(blob => {
-                        const url = URL.createObjectURL(blob); // Cria uma URL para o Blob
-                        const imgTag = document.querySelector("#imgUpload");
-                        imgTag.src = url; // Define o src da tag <img>
-                        console.log(imgTag.src);
-                    })
-                    .catch(error => {
-                        console.error("Erro ao carregar a imagem:", error);
-                    });
+            fetch(`http://10.116.81.5:3000/getImage/${image.id_image}`)
+                .then(response => {
+                    if (response.ok) {
+                        return response.blob(); // Obtém a imagem como um Blob
+                    } else {
+                        throw new Error("Erro ao buscar a imagem");
+                    }
+                })
+                .then(blob => {
+                    const url = URL.createObjectURL(blob); // Cria uma URL para o Blob
+                    const imgTag = document.querySelector("#imgUpload");
+                    imgTag.src = url; // Define o src da tag <img>
+                    console.log(imgTag.src);
+                })
+                .catch(error => {
+                    console.error("Erro ao carregar a imagem:", error);
+                });
 
-                // Outros campos do chamado podem ser usados aqui
-                // {call[0].id_image}, {call[0].sala}, {call[0].text}, etc.
-            }
+            // Outros campos do chamado podem ser usados aqui
+            // {call[0].id_image}, {call[0].sala}, {call[0].text}, etc.
+        }
         )
         .catch(error => {
             console.error('Erro ao processar os chamados:', error);
@@ -92,8 +122,11 @@ export function getTask(idUser, idTask) {
 }
 
 
+
+
+
 // ----------------------------
-function updateTask(idUser, idTask) {
+async function updateTask(idUser, idTask) {
     let inputTitle = document.getElementById("inputNameTask").value;
 
     let statusSpan = document.getElementById("statusSpan");
@@ -116,27 +149,85 @@ function updateTask(idUser, idTask) {
     let descricao = document.getElementById("descricao").value;
 
 
+    console.log(idImage);
 
-    fetch(`http://localhost:3000/tasks/updateTask`, {
+    if (!selectedFile) {
+        console.log("Nenhuma imagem selecionada");
+    } else {
+
+        fetch(`http://10.116.81.5:3000/getImage/delete/${idImage}`, {
+            method: "DELETE",
+        })
+            .then((response) => {
+                if (response.status === 200) {
+                    // alert("Imagem deletada com sucesso!");
+                    // Aqui você pode recarregar a lista de tarefas
+                    console.log(`Imagem ${idImage} deletada!`);
+                } else if (response.status === 404) {
+                    alert("Imagem não encontrada.");
+                } else {
+                    alert("Erro ao deletar a Imagem.");
+                }
+                return response.json();
+            })
+            .catch((err) => {
+                console.error("Erro na exclusão da Imagem:", err);
+            });
+
+
+        // Cria o FormData com a imagem
+        const formData = new FormData();
+        formData.append("image", selectedFile); // Envia apenas a imagem
+
+        try {
+            const response = await fetch("http://10.116.81.5:3000/upload-image", {
+                method: "POST",
+                body: formData,
+            });
+
+            if (response.ok) {
+                const result = await response.json();
+                idImage = result.imageId; // Armazena o ID na variável global
+                // alert("Imagem enviada com sucesso! ID: " + imageId);
+                console.log("imagem: " + idImage);
+
+                // createTask(idUser);
+
+            } else {
+                alert("Erro ao enviar imagem.");
+            }
+        } catch (error) {
+            console.error("Erro ao conectar ao servidor:", error);
+            alert("Err  o ao enviar a imagem.");
+        }
+
+
+
+    }
+
+
+
+
+
+    fetch(`http://10.116.81.5:3000/tasks/updateTask`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ idUser, idTask, inputTitle, statusSpan, prioSpan, inputData, inputSala, inputRespon, descricao })
+        body: JSON.stringify({ idUser, idTask, inputTitle, statusSpan, prioSpan, inputData, inputSala, inputRespon, descricao, idImage })
     })
         .then(response => {
             if (response.status === 200) {
                 alert('Tarefa atualizada com sucesso')
                 console.log('Tarefa atualizada com sucesso');
 
-
                 const urlParams = new URLSearchParams(window.location.search);
 
                 // Verifica se o parâmetro 'source' tem o valor 'taskManager'
                 if (urlParams.get('source') === 'taskManager') {
-                    window.location.href = 'http://localhost:13542/Front/pages/taskManager.html';
+                    window.location.href = 'http://10.116.81.5:13542/Front/pages/taskManager.html';
                 }
 
                 if (urlParams.get('source') === 'taskColab') {
-                    window.location.href = 'http://localhost:13542/Front/pages/taskColab.html';
+                    window.location.href = 'http://10.116.81.5:13542/Front/pages/taskColab.html';
                 }
 
                 // return response.json();
@@ -154,12 +245,13 @@ function updateTask(idUser, idTask) {
             console.log(inputSala);
             console.log(inputData);
             console.log(descricao);
+            console.log(idImage);
         })
 }
 
 function deleteTask(idUser, idTask) {
     if (confirm("Tem certeza de que deseja deletar esta tarefa?")) {
-        fetch(`http://localhost:3000/user/${idUser}/tasks/${idTask}`, {
+        fetch(`http://10.116.81.5:3000/user/${idUser}/tasks/${idTask}`, {
             method: "DELETE",
         })
             .then((response) => {
@@ -168,12 +260,40 @@ function deleteTask(idUser, idTask) {
                     // Aqui você pode recarregar a lista de tarefas
                     console.log(`Tarefa ${idTask} deletada!`);
 
-                    window.location.href = "http://localhost:13542/Front/pages/taskManager.html";
+
+                    fetch(`http://10.116.81.5:3000//getImage/delete/${idImage}`, {
+                        method: "DELETE"
+                    })
+                        .then(resposta => {
+                            if (resposta.ok) {
+                                alert(`Imagem ${idImage} deletada`)
+                                console.log(`Imagem ${idImage} deletada.`);
+                            } else {
+                                throw new Error("Erro ao deletar a imagem");
+                            }
+                        })
+                        .catch(error => {
+                            console.error("Erro ao deletar a imagem:", error);
+                        });
+
                 } else if (response.status === 404) {
                     alert("Tarefa não encontrada.");
                 } else {
                     alert("Erro ao deletar a tarefa.");
                 }
+
+                const urlParams = new URLSearchParams(window.location.search);
+
+                // Verifica se o parâmetro 'source' tem o valor 'taskManager'
+                if (urlParams.get('source') === 'taskManager') {
+                    window.location.href = 'http://10.116.81.5:13542/Front/pages/taskManager.html';
+                }
+
+                if (urlParams.get('source') === 'taskColab') {
+                    window.location.href = 'http://10.116.81.5:13542/Front/pages/taskColab.html';
+                }
+
+
                 return response.json();
             })
             .catch((err) => {

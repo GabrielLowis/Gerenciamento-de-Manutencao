@@ -51,6 +51,11 @@
                 </div>
             </div>
 
+            <!-- pq ta arquivada -->
+            <div id="inputComentario" style="display: none;">
+                <textarea placeholder="Porque essa tarefa esta sendo arquivada?"></textarea>
+            </div>
+
             <div id="addTaskPrioridade" class="addTaskItems">
                 <h3><i class="bi bi-star-fill"></i> Prioridade</h3>
                 <span id="prioSpan">Alta</span>
@@ -66,6 +71,9 @@
             <div id="addTaskResponsavel" class="addTaskItems">
                 <h3><i class="bi bi-file-person-fill"></i> Responsável</h3>
                 <input id="inputRespon" type="text" placeholder="Vazio">
+
+                <div id="selectRespon" style="display: none;">
+                </div>
             </div>
 
             <div id="addTaskPrazo" class="addTaskItems">
@@ -80,11 +88,12 @@
 
             <div id="addTaskDescricao">
                 <h2>Descrição</h2>
-                <textarea id="descricao" rows="14" cols="250" placeholder="Escreva aqui a descrição da tarefa"></textarea>
+                <textarea id="descricao" rows="14" cols="250"
+                    placeholder="Escreva aqui a descrição da tarefa"></textarea>
             </div>
 
-            <a href="" id="addTaskAdicionar" style="cursor: pointer;">Atualizar</a>
-            <a href="" id="addTaskDeletar" style="cursor: pointer;">Deletar</a>
+            <a id="addTaskAdicionar" style="cursor: pointer; margin-bottom: 15px;">Atualizar</a>
+            <a id="addTaskDeletar" style="cursor: pointer;">Deletar</a>
         </main>
 
     </section>
@@ -93,13 +102,13 @@
         // Adiciona o evento de clique ao link
         const link = document.getElementById('addTaskAdicionar');
         link.addEventListener('click', (e) => {
-          e.preventDefault(); // Impede o comportamento padrão (remova se necessário)
-          link.classList.add('clicked');
+            e.preventDefault(); // Impede o comportamento padrão (remova se necessário)
+            link.classList.add('clicked');
         });
-      </script>
+    </script>
 
     <script>
-         document.addEventListener("DOMContentLoaded", () => {
+        document.addEventListener("DOMContentLoaded", () => {
             // Obtém o parâmetro "source" da URL
             const params = new URLSearchParams(window.location.search);
             const source = params.get("source");
@@ -115,7 +124,7 @@
         });
     </script>
 
-    <script>
+    <!-- <script>
         // Seleciona a imagem e o input file
         const img = document.getElementById("imgUpload");
         const fileInput = document.getElementById("fileInput");
@@ -140,7 +149,7 @@
             }
         });
 
-    </script>
+    </script> -->
 
     <script>
         const iconSelect = document.querySelector("#toggleSelect");
@@ -174,7 +183,7 @@
             const taskId = localStorage.getItem('taskId');
 
             console.log(taskId);
-            
+
 
             if (select.style.display === 'none') {
                 select.style.display = 'block';
@@ -213,7 +222,61 @@
             btnStatus.textContent = "Arquivada";
             btnStatus.className = "arquivada";
             select.style.display = 'none';
+            
+            const params = new URLSearchParams(window.location.search);
+            const source = params.get("source");
+            
+            if (source === "taskColab") {
+                inputComentario.style.display = 'flex';
+            }
+            // console.log('ARQUIVADA');
         });
+    </script>
+
+    <script>
+        const selectRespon = document.querySelector("#selectRespon");
+        const inputRespon = document.getElementById("inputRespon");
+
+        fetch(`http://10.116.81.5:3000/usersColab`)
+            .then(response => {
+                if (response.status === 200) {
+                    return response.json(); // Retorna o JSON para a próxima then
+                } else {
+                    console.error('Erro na resposta da API:', response.status);
+                    throw new Error('Erro ao buscar dados'); // Lança erro para ser tratado no catch
+                }
+            })
+            .then(users => {
+                // Preencher os spans com os usernames
+                users.forEach(user => {
+                    selectRespon.innerHTML += `<span onclick="document.getElementById('inputRespon').value = this.innerText;">${user.username}</span>`;
+                });
+            })
+            .catch(error => {
+                console.error(error);
+            });
+
+        inputRespon.addEventListener("click", () => {
+            // Alterna o display do selectRespon
+            selectRespon.style.display = selectRespon.style.display === 'flex' ? 'none' : 'flex';
+        });
+
+        // Fecha o selectRespon se clicar fora dele
+        document.addEventListener("click", (event) => {
+            // Verifica se o clique foi fora do inputRespon ou selectRespon
+            if (!selectRespon.contains(event.target) && event.target !== inputRespon) {
+                selectRespon.style.display = 'none';
+            }
+        });
+
+        // Adiciona o evento de clique para os spans já adicionados
+        selectRespon.addEventListener("click", (event) => {
+            if (event.target.tagName.toLowerCase() === "span") {
+                inputRespon.value = event.target.innerText; // Coloca o texto do span no input
+                selectRespon.style.display = 'none'; // Fecha o selectRespon
+            }
+        });
+
     </script>
 
     <script>
