@@ -258,7 +258,7 @@
         const selectRespon = document.querySelector("#selectRespon");
         const inputRespon = document.getElementById("inputRespon");
 
-        fetch(`http://10.116.81.5:3000/usersColab`)
+        fetch(`http://10.116.75.143:3000/usersColab`)
             .then(response => {
                 if (response.status === 200) {
                     return response.json(); // Retorna o JSON para a próxima then
@@ -315,7 +315,7 @@
             const idCall = localStorage.getItem('idCall');
             console.log(idCall);
 
-            fetch(`http://10.116.81.5:3000/call/${idCall}`)
+            fetch(`http://10.116.75.143:3000/call/${idCall}`)
                 .then(response => {
                     if (response.status === 200) {
                         return response.json(); // Retorna o JSON para a próxima then
@@ -344,7 +344,7 @@
 
 
 
-                        fetch(`http://10.116.81.5:3000/getImage/${call[0].id_image}`)
+                        fetch(`http://10.116.75.143:3000/getImage/${call[0].id_image}`)
                             .then(response => {
                                 if (response.ok) {
                                     return response.blob(); // Obtém a imagem como um Blob

@@ -38,7 +38,7 @@ window.onload = function () {
 
 // ----------------------------
 export function getTask(idUser, idTask) {
-    fetch(`http://10.116.81.5:3000/user/${idUser}/tasks/${idTask}`)
+    fetch(`http://10.116.75.143:3000/user/${idUser}/tasks/${idTask}`)
         .then(response => {
             if (response.status === 200) {
                 console.log('funcionou');
@@ -94,7 +94,7 @@ export function getTask(idUser, idTask) {
         })
         .then(image => {
             // console.log(image.id_image);
-            fetch(`http://10.116.81.5:3000/getImage/${image.id_image}`)
+            fetch(`http://10.116.75.143:3000/getImage/${image.id_image}`)
                 .then(response => {
                     if (response.ok) {
                         return response.blob(); // Obtém a imagem como um Blob
@@ -147,111 +147,153 @@ async function updateTask(idUser, idTask) {
     inputData = converterParaDataBrasileira(inputData);
 
     let descricao = document.getElementById("descricao").value;
+    
+    let inputComentario = document.getElementById("inputComentario");
+    const estilo = window.getComputedStyle(inputComentario); 
+    
+    console.log(estilo.display);
+    
+    
+    
+    if (estilo.display === 'flex') {
+        let valueComent = document.getElementById("valueComent").value;
+        
+        console.log(valueComent);
+
+        // fetch(`http://10.116.75.143:3000/coment/${idTask}`, {
+    //     method: 'POST',
+    //     headers: { 'Content-Type': 'application/json' },
+    //     body: JSON.stringify({ idUser, idTask, inputTitle, statusSpan, prioSpan, inputData, inputSala, inputRespon, descricao, idImage })
+    // })
+    //     .then(response => {
+    //         if (response.status === 200) {
+    //             alert('Tarefa atualizada com sucesso')
+    //             console.log('Tarefa atualizada com sucesso');
+
+    //             const urlParams = new URLSearchParams(window.location.search);
+
+    //             // Verifica se o parâmetro 'source' tem o valor 'taskManager'
+    //             if (urlParams.get('source') === 'taskManager') {
+    //                 window.location.href = 'http://10.116.75.143:13542/Front/pages/taskManager.html';
+    //             }
+
+    //             if (urlParams.get('source') === 'taskColab') {
+    //                 window.location.href = 'http://10.116.75.143:13542/Front/pages/taskColab.html';
+    //             }
+
+    //             // return response.json();
+    //         } else {
+    //             alert('Erro ao atualizar a tarefa');
+    //             throw new Error('Erro ao atualizar a tarefa');
+    //         }
+    //     })
+        
+    }
 
 
     console.log(idImage);
 
-    if (!selectedFile) {
-        console.log("Nenhuma imagem selecionada");
-    } else {
+    // if (!selectedFile) {
+    //     console.log("Nenhuma imagem selecionada");
+    // } else {
 
-        fetch(`http://10.116.81.5:3000/getImage/delete/${idImage}`, {
-            method: "DELETE",
-        })
-            .then((response) => {
-                if (response.status === 200) {
-                    // alert("Imagem deletada com sucesso!");
-                    // Aqui você pode recarregar a lista de tarefas
-                    console.log(`Imagem ${idImage} deletada!`);
-                } else if (response.status === 404) {
-                    alert("Imagem não encontrada.");
-                } else {
-                    alert("Erro ao deletar a Imagem.");
-                }
-                return response.json();
-            })
-            .catch((err) => {
-                console.error("Erro na exclusão da Imagem:", err);
-            });
-
-
-        // Cria o FormData com a imagem
-        const formData = new FormData();
-        formData.append("image", selectedFile); // Envia apenas a imagem
-
-        try {
-            const response = await fetch("http://10.116.81.5:3000/upload-image", {
-                method: "POST",
-                body: formData,
-            });
-
-            if (response.ok) {
-                const result = await response.json();
-                idImage = result.imageId; // Armazena o ID na variável global
-                // alert("Imagem enviada com sucesso! ID: " + imageId);
-                console.log("imagem: " + idImage);
-
-                // createTask(idUser);
-
-            } else {
-                alert("Erro ao enviar imagem.");
-            }
-        } catch (error) {
-            console.error("Erro ao conectar ao servidor:", error);
-            alert("Err  o ao enviar a imagem.");
-        }
+    //     fetch(`http://10.116.75.143:3000/getImage/delete/${idImage}`, {
+    //         method: "DELETE",
+    //     })
+    //         .then((response) => {
+    //             if (response.status === 200) {
+    //                 // alert("Imagem deletada com sucesso!");
+    //                 // Aqui você pode recarregar a lista de tarefas
+    //                 console.log(`Imagem ${idImage} deletada!`);
+    //             } else if (response.status === 404) {
+    //                 alert("Imagem não encontrada.");
+    //             } else {
+    //                 alert("Erro ao deletar a Imagem.");
+    //             }
+    //             return response.json();
+    //         })
+    //         .catch((err) => {
+    //             console.error("Erro na exclusão da Imagem:", err);
+    //         });
 
 
+    //     // Cria o FormData com a imagem
+    //     const formData = new FormData();
+    //     formData.append("image", selectedFile); // Envia apenas a imagem
 
-    }
+    //     try {
+    //         const response = await fetch("http://10.116.75.143:3000/upload-image", {
+    //             method: "POST",
+    //             body: formData,
+    //         });
+
+    //         if (response.ok) {
+    //             const result = await response.json();
+    //             idImage = result.imageId; // Armazena o ID na variável global
+    //             // alert("Imagem enviada com sucesso! ID: " + imageId);
+    //             console.log("imagem: " + idImage);
+
+    //             // createTask(idUser);
+
+    //         } else {
+    //             alert("Erro ao enviar imagem.");
+    //         }
+    //     } catch (error) {
+    //         console.error("Erro ao conectar ao servidor:", error);
+    //         alert("Err  o ao enviar a imagem.");
+    //     }
 
 
 
+    // }
 
 
-    fetch(`http://10.116.81.5:3000/tasks/updateTask`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ idUser, idTask, inputTitle, statusSpan, prioSpan, inputData, inputSala, inputRespon, descricao, idImage })
-    })
-        .then(response => {
-            if (response.status === 200) {
-                alert('Tarefa atualizada com sucesso')
-                console.log('Tarefa atualizada com sucesso');
 
-                const urlParams = new URLSearchParams(window.location.search);
 
-                // Verifica se o parâmetro 'source' tem o valor 'taskManager'
-                if (urlParams.get('source') === 'taskManager') {
-                    window.location.href = 'http://10.116.81.5:13542/Front/pages/taskManager.html';
-                }
 
-                if (urlParams.get('source') === 'taskColab') {
-                    window.location.href = 'http://10.116.81.5:13542/Front/pages/taskColab.html';
-                }
+    // fetch(`http://10.116.75.143:3000/tasks/updateTask`, {
+    //     method: 'POST',
+    //     headers: { 'Content-Type': 'application/json' },
+    //     body: JSON.stringify({ idUser, idTask, inputTitle, statusSpan, prioSpan, inputData, inputSala, inputRespon, descricao, idImage })
+    // })
+    //     .then(response => {
+    //         if (response.status === 200) {
+    //             alert('Tarefa atualizada com sucesso')
+    //             console.log('Tarefa atualizada com sucesso');
 
-                // return response.json();
-            } else {
-                alert('Erro ao atualizar a tarefa');
-                throw new Error('Erro ao atualizar a tarefa');
-            }
-        })
-        .then(dados => {
-            console.log(idTask);
-            console.log(inputTitle);
-            console.log(statusSpan);
-            console.log(prioSpan);
-            console.log(inputRespon);
-            console.log(inputSala);
-            console.log(inputData);
-            console.log(descricao);
-            console.log(idImage);
-        })
+    //             const urlParams = new URLSearchParams(window.location.search);
+
+    //             // Verifica se o parâmetro 'source' tem o valor 'taskManager'
+    //             if (urlParams.get('source') === 'taskManager') {
+    //                 window.location.href = 'http://10.116.75.143:13542/Front/pages/taskManager.html';
+    //             }
+
+    //             if (urlParams.get('source') === 'taskColab') {
+    //                 window.location.href = 'http://10.116.75.143:13542/Front/pages/taskColab.html';
+    //             }
+
+    //             // return response.json();
+    //         } else {
+    //             alert('Erro ao atualizar a tarefa');
+    //             throw new Error('Erro ao atualizar a tarefa');
+    //         }
+    //     })
+    //     .then(dados => {
+    //         console.log(idTask);
+    //         console.log(inputTitle);
+    //         console.log(statusSpan);
+    //         console.log(prioSpan);
+    //         console.log(inputRespon);
+    //         console.log(inputSala);
+    //         console.log(inputData);
+    //         console.log(descricao);
+    //         console.log(idImage);
+    //     })
 }
 
 function deleteTask(idUser, idTask) {
     if (confirm("Tem certeza de que deseja deletar esta tarefa?")) {
-        fetch(`http://10.116.81.5:3000/user/${idUser}/tasks/${idTask}`, {
+        fetch(`http://10.116.75.143:3000/user/${idUser}/tasks/${idTask}`, {
             method: "DELETE",
         })
             .then((response) => {
@@ -261,7 +303,7 @@ function deleteTask(idUser, idTask) {
                     console.log(`Tarefa ${idTask} deletada!`);
 
 
-                    fetch(`http://10.116.81.5:3000//getImage/delete/${idImage}`, {
+                    fetch(`http://10.116.75.143:3000//getImage/delete/${idImage}`, {
                         method: "DELETE"
                     })
                         .then(resposta => {
@@ -286,11 +328,11 @@ function deleteTask(idUser, idTask) {
 
                 // Verifica se o parâmetro 'source' tem o valor 'taskManager'
                 if (urlParams.get('source') === 'taskManager') {
-                    window.location.href = 'http://10.116.81.5:13542/Front/pages/taskManager.html';
+                    window.location.href = 'http://10.116.75.143:13542/Front/pages/taskManager.html';
                 }
 
                 if (urlParams.get('source') === 'taskColab') {
-                    window.location.href = 'http://10.116.81.5:13542/Front/pages/taskColab.html';
+                    window.location.href = 'http://10.116.75.143:13542/Front/pages/taskColab.html';
                 }
 
 

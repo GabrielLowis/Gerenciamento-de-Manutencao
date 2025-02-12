@@ -53,7 +53,7 @@
 
             <!-- pq ta arquivada -->
             <div id="inputComentario" style="display: none;">
-                <textarea placeholder="Porque essa tarefa esta sendo arquivada?"></textarea>
+                <textarea id="valueComent" placeholder="Porque essa tarefa esta sendo arquivada?"></textarea>
             </div>
 
             <div id="addTaskPrioridade" class="addTaskItems">
@@ -204,18 +204,21 @@
             btnStatus.textContent = "A fazer";
             btnStatus.className = "fazer";
             select.style.display = 'none';
+            inputComentario.style.display = 'none';
         });
 
         optionAndamento.addEventListener("click", () => {
             btnStatus.textContent = "Em andamento";
             btnStatus.className = "andamento";
             select.style.display = 'none';
+            inputComentario.style.display = 'none';
         });
 
         optionConcluida.addEventListener("click", () => {
             btnStatus.textContent = "Concluida";
             btnStatus.className = "concluida";
             select.style.display = 'none';
+            inputComentario.style.display = 'none';
         });
 
         optionArquivada.addEventListener("click", () => {
@@ -237,7 +240,7 @@
         const selectRespon = document.querySelector("#selectRespon");
         const inputRespon = document.getElementById("inputRespon");
 
-        fetch(`http://10.116.81.5:3000/usersColab`)
+        fetch(`http://10.116.75.143:3000/usersColab`)
             .then(response => {
                 if (response.status === 200) {
                     return response.json(); // Retorna o JSON para a próxima then

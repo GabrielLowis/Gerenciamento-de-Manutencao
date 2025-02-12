@@ -143,11 +143,11 @@
 
         function storageCall(id) {
             localStorage.setItem('idCall', id);
-            window.location.href = 'http://10.116.81.5:13542/Front/pages/infoChamado.html';
+            window.location.href = 'http://10.116.75.143:13542/Front/pages/infoChamado.html';
         }
 
         window.onload = () => {
-            fetch(`http://10.116.81.5:3000/calls`)
+            fetch(`http://10.116.75.143:3000/calls`)
                 .then(response => {
                     if (response.status === 200) {
                         // console.log(response.json());
@@ -186,7 +186,7 @@
                             }
 
                             let htmlCall = `<tr>
-                                <td class="tarefas" style="padding-left: 5px;"><img class="callImage" width="100px" style="cursor: pointer;" src="http://10.116.81.5:3000/getImage/${call.id_image}"></td>
+                                <td class="tarefas" style="padding-left: 5px;"><img class="callImage" width="100px" style="cursor: pointer;" src="http://10.116.75.143:3000/getImage/${call.id_image}"></td>
                                 <td class="tarefas" style="white-space: pre; padding: 0 10px; text-align: center;"><a style="all: unset; cursor: pointer;" onclick="storageCall('${call.id}')">${formattedDateTime} <br> ${timePassed}</a></td>
                                 <td class="status" style="color: black; font-size: 20px;">${call.sala}</td>
                                 <td class="descricao call" style="padding-left: 15px">${call.text}</td>

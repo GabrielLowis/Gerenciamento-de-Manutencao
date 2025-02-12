@@ -1,12 +1,12 @@
 const express = require('express');
-const mysql = require('mysql');
+const mysql = require('mysql2');
 const cors = require('cors');
 
 // Opções de conexão com o MySQL
 const connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: '',
+    password: 'root',
     database: 'bd_tasks'
 });
 
@@ -325,6 +325,37 @@ app.delete("/call/deleteCall/:idCall", (req, res) => {
     });
 });
 
+// -------------------------------------
+app.post("/coment/:taskId", (req, res) => {
+    // const { coment, taskId } = req.body;
+    
+    connection.query("UPDATE tasks SET coment = ? WHERE id = ?",
+        [req.body.coment, req.body.descricao], (err, results) => {
+            if (err) {
+                res.send('MySQL Connection error');
+                console.log('erro');
+                
+            }
+        })
+});
 
+
+
+// app.post("/call/updateCall", (req, res) => {
+//     // console.log(req.body.idUser);
+//     // console.log(req.body.idTask);
+//     // console.log(req.body.inputTitle);
+//     // res.send('finalizado');
+
+//     connection.query("UPDATE chamados SET sala = ?, text = ? WHERE id = ?", 
+//         [req.body.inputSala, req.body.descricao, req.body.idCall], (err, results) => {
+//         if (err) {
+//             res.send('MySQL Connection error');
+//             console.log('erro');
+//         }
+//     })
+    
+//     res.json('ok');
+// });
 
 
