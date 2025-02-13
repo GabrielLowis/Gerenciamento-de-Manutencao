@@ -21,7 +21,7 @@ if (btnEntrar) {
 
 function getUserTask(username, passwrd){
 
-    fetch(`http://10.116.75.143:3000/users/${username}`)
+    fetch(`http://10.116.75.167:3000/users/${username}`)
     .then(response => {
         if (response.status === 200) {
             return response.json();
@@ -44,9 +44,9 @@ function getUserTask(username, passwrd){
                 localStorage.setItem('nivel', nivel)
 
                 if (dados[0].nivel === 1) {
-                    window.location.href = 'http://10.116.75.143:13542/Front/pages/taskManager.html';
+                    window.location.href = 'http://10.116.75.167:13542/Front/pages/taskManager.html';
                 } else if (dados[0].nivel === 2) {
-                    window.location.href = 'http://10.116.75.143:13542/Front/pages/taskColab.html';
+                    window.location.href = 'http://10.116.75.167:13542/Front/pages/taskColab.html';
                 }
                 
                 

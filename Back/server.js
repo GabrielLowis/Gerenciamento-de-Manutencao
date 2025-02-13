@@ -327,10 +327,10 @@ app.delete("/call/deleteCall/:idCall", (req, res) => {
 
 // -------------------------------------
 app.post("/coment/:taskId", (req, res) => {
-    // const { coment, taskId } = req.body;
+    // const { valueComent, idTask } = req.body;
     
     connection.query("UPDATE tasks SET coment = ? WHERE id = ?",
-        [req.body.coment, req.body.descricao], (err, results) => {
+        [req.body.valueComent, req.body.idTask], (err, results) => {
             if (err) {
                 res.send('MySQL Connection error');
                 console.log('erro');
