@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <!-- <script type="module" src="../scripts/index.js" defer></script> -->
     <link rel="stylesheet" href="../styles.css">
-    <title>Documentt</title>
+    <title>Suas Tarefas</title>
 </head>
 
 <body>
@@ -83,6 +83,8 @@
                     </tr> -->
                 </table>
             </section>
+
+            <button id="btnImprimirTasks"> <i class="bi bi-printer-fill"></i> Imprimir tarefas</button>
         </div>
     </main>
 
@@ -106,7 +108,7 @@
         }
 
         function getUserName(idUser) {
-            fetch(`http://10.116.75.167:3000/user/${idUser}`)
+            fetch(`http://${ipServer}:3000/user/${idUser}`)
                 .then(response => {
                     if (response.status === 200) {
                         // console.log(response.json());
@@ -128,7 +130,7 @@
 
         // ----------------------------
         function getTask(username) {
-            fetch(`http://10.116.75.167:3000/tasks`)
+            fetch(`http://${ipServer}:3000/tasks`)
                 .then(response => {
                     if (response.status === 200) {
                         return response.json();

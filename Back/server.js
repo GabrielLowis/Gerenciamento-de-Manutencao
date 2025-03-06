@@ -10,7 +10,7 @@ const connection = mysql.createConnection({
     database: 'bd_tasks'
 });
 
-const app = new express();
+const app = new express();  
 app.listen(3000, () => {
     console.log('Servidor iniciado.');
 })
@@ -84,6 +84,8 @@ app.get("/user/:id/tasks/", (req, res) => {
         res.json(results);
     })
 });
+
+
 
 // -------------------------------------
 // app.get("/user/:nivel/tasks/", (req, res) => [

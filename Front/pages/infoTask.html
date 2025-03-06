@@ -8,7 +8,7 @@
     <script type="module" src="../scripts/index.js" defer></script>
     <script type="module" src="../scripts/infoTask.js" defer></script>
     <link rel="stylesheet" href="../styles.css">
-    <title>Document</title>
+    <title>Tarefa</title>
 </head>
 
 <body id="bodyAddTask">
@@ -240,7 +240,7 @@
         const selectRespon = document.querySelector("#selectRespon");
         const inputRespon = document.getElementById("inputRespon");
 
-        fetch(`http://10.116.75.167:3000/usersColab`)
+        fetch(`http://${ipServer}:3000/usersColab`)
             .then(response => {
                 if (response.status === 200) {
                     return response.json(); // Retorna o JSON para a próxima then
@@ -252,7 +252,7 @@
             .then(users => {
                 // Preencher os spans com os usernames
                 users.forEach(user => {
-                    selectRespon.innerHTML += `<span onclick="document.getElementById('inputRespon').value = this.innerText;">${user.username}</span>`;
+                    selectRespon.innerHTML += `<span onclick="document.getElementById('inputRespon').value = this.innerText;">${user.username.charAt(0).toUpperCase() + user.username.slice(1)}</span>`;
                 });
             })
             .catch(error => {
@@ -277,6 +277,9 @@
             if (event.target.tagName.toLowerCase() === "span") {
                 inputRespon.value = event.target.innerText; // Coloca o texto do span no input
                 selectRespon.style.display = 'none'; // Fecha o selectRespon
+
+                // console.log(inputRespon.value.charAt(0).toLowerCase() + inputRespon.value.slice(1));
+                
             }
         });
 

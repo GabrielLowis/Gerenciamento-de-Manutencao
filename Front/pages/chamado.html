@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     <link rel="stylesheet" href="../styles.css">
-    <title>Document</title>
+    <title>Chamado</title>
 </head>
 
 <body id="bodyAddTask">
@@ -94,7 +94,7 @@
             formData.append("image", selectedFile); // Envia apenas a imagem
 
             try {
-                const response = await fetch("http://10.116.75.167:3000/upload-image", {
+                const response = await fetch(`http://${ipServer}:3000/upload-image`, {
                     method: "POST",
                     body: formData,
                 });
@@ -112,7 +112,7 @@
             }
 
             try {
-                const response = await fetch(`http://10.116.75.167:3000/createCall/`, {
+                const response = await fetch(`http://${ipServer}:3000/createCall/`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ imageId, inputSala, descricao }),

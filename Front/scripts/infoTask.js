@@ -1,3 +1,4 @@
+import { ipServer } from "../ipConfig.js"; // Caminho para o arquivo com as configurações do ip
 let idUser = localStorage.getItem('idUser');
 let idTask;
 
@@ -38,7 +39,7 @@ window.onload = function () {
 
 // ----------------------------
 export function getTask(idUser, idTask) {
-    fetch(`http://10.116.75.167:3000/user/${idUser}/tasks/${idTask}`)
+    fetch(`http://${ipServer}:3000/user/${idUser}/tasks/${idTask}`)
         .then(response => {
             if (response.status === 200) {
                 console.log('funcionou');
@@ -110,7 +111,7 @@ export function getTask(idUser, idTask) {
         })
         .then(image => {
             // console.log(image.id_image);
-            fetch(`http://10.116.75.167:3000/getImage/${image.id_image}`)
+            fetch(`http://${ipServer}:3000/getImage/${image.id_image}`)
                 .then(response => {
                     if (response.ok) {
                         return response.blob(); // Obtém a imagem como um Blob
@@ -176,7 +177,7 @@ async function updateTask(idUser, idTask) {
         
         console.log(valueComent);
 
-        fetch(`http://10.116.75.167:3000/coment/${idTask}`, {
+        fetch(`http://${ipServer}:3000/coment/${idTask}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ valueComent, idTask })
@@ -202,7 +203,7 @@ async function updateTask(idUser, idTask) {
         console.log("Nenhuma imagem selecionada");
     } else {
 
-        fetch(`http://10.116.75.167:3000/getImage/delete/${idImage}`, {
+        fetch(`http://${ipServer}:3000/getImage/delete/${idImage}`, {
             method: "DELETE",
         })
             .then((response) => {
@@ -227,7 +228,7 @@ async function updateTask(idUser, idTask) {
         formData.append("image", selectedFile); // Envia apenas a imagem
 
         try {
-            const response = await fetch("http://10.116.75.167:3000/upload-image", {
+            const response = await fetch(`http://${ipServer}:3000/upload-image`, {
                 method: "POST",
                 body: formData,
             });
@@ -256,7 +257,7 @@ async function updateTask(idUser, idTask) {
 
 
 
-    fetch(`http://10.116.75.167:3000/tasks/updateTask`, {
+    fetch(`http://${ipServer}:3000/tasks/updateTask`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ idUser, idTask, inputTitle, statusSpan, prioSpan, inputData, inputSala, inputRespon, descricao, idImage })
@@ -270,11 +271,11 @@ async function updateTask(idUser, idTask) {
 
                 // Verifica se o parâmetro 'source' tem o valor 'taskManager'
                 if (urlParams.get('source') === 'taskManager') {
-                    window.location.href = 'http://10.116.75.167:13542/Front/pages/taskManager.html';
+                    window.location.href = `http://${ipServer}:13542/Front/pages/taskManager.html`;
                 }
 
                 if (urlParams.get('source') === 'taskColab') {
-                    window.location.href = 'http://10.116.75.167:13542/Front/pages/taskColab.html';
+                    window.location.href = `http://${ipServer}:13542/Front/pages/taskColab.html`;
                 }
 
                 // return response.json();
@@ -298,7 +299,7 @@ async function updateTask(idUser, idTask) {
 
 function deleteTask(idUser, idTask) {
     if (confirm("Tem certeza de que deseja deletar esta tarefa?")) {
-        fetch(`http://10.116.75.167:3000/user/${idUser}/tasks/${idTask}`, {
+        fetch(`http://${ipServer}:3000/user/${idUser}/tasks/${idTask}`, {
             method: "DELETE",
         })
             .then((response) => {
@@ -308,7 +309,7 @@ function deleteTask(idUser, idTask) {
                     console.log(`Tarefa ${idTask} deletada!`);
 
 
-                    fetch(`http://10.116.75.167:3000//getImage/delete/${idImage}`, {
+                    fetch(`http://${ipServer}:3000//getImage/delete/${idImage}`, {
                         method: "DELETE"
                     })
                         .then(resposta => {
@@ -333,11 +334,11 @@ function deleteTask(idUser, idTask) {
 
                 // Verifica se o parâmetro 'source' tem o valor 'taskManager'
                 if (urlParams.get('source') === 'taskManager') {
-                    window.location.href = 'http://10.116.75.167:13542/Front/pages/taskManager.html';
+                    window.location.href = `http://${ipServer}:13542/Front/pages/taskManager.html`;
                 }
 
                 if (urlParams.get('source') === 'taskColab') {
-                    window.location.href = 'http://10.116.75.167:13542/Front/pages/taskColab.html';
+                    window.location.href = `http://${ipServer}:13542/Front/pages/taskColab.html`;
                 }
 
 

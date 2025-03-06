@@ -1,4 +1,4 @@
-
+import { ipServer } from "../ipConfig.js"; // Caminho para o arquivo com as configurações do ip
 let idUser = localStorage.getItem('idUser');
 let nivel = localStorage.getItem('nivel');
 
@@ -13,7 +13,7 @@ window.onload = () => {
 }
 
 export function getUserName(idUser) {
-    fetch(`http://10.116.75.167:3000/user/${idUser}`)
+    fetch(`http://${ipServer}:3000/user/${idUser}`)
         .then(response => {
             if (response.status === 200) {
                 console.log(response.json());
@@ -32,7 +32,7 @@ export function getUserName(idUser) {
 
 // ----------------------------
 export function getUserTask() {
-    fetch(`http://10.116.75.167:3000/tasks`)
+    fetch(`http://${ipServer}:3000/tasks`)
         .then(response => {
             if (response.status === 200) {
                 return response.json();
@@ -140,7 +140,7 @@ export function getUserTask() {
                                 <div class="taskArquivada">
                                     <h2 class="tarefas"><a href="../pages/infoTask.html?source=taskQuadroManager" onclick="storeTaskId(${tarefa.id})">${tarefa.task_title}</a></h2>
                                     <h2 class="responsavel"><a href="#">${tarefa.task_respon.charAt(0).toUpperCase() + tarefa.task_respon.slice(1)}</a></h2>
-                                    <span class="${tarefa.task_prior}">${tarefa.task_prior.charAt(0).toUpperCase() + tarefa.task_prior.slice(1)}</span>
+                                      <span class="${tarefa.task_prior}">${tarefa.task_prior.charAt(0).toUpperCase() + tarefa.task_prior.slice(1)}</span>
                                 </div>
                             `;
                             containerArquivado.innerHTML += htmlTaskQuadroArquivado;

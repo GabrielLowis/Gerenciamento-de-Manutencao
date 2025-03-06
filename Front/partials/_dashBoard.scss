@@ -1,0 +1,199 @@
+#bodyDash {
+  background-color: #e2e2e2;
+  height: auto;
+}
+
+#containerDash {
+  background-color: white;
+  width: 95%;
+  min-height: 85vh;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  margin-right: auto;
+  margin-left: auto;
+  margin-top: 15px;
+  border-radius: 25px;
+  padding: 15px;
+}
+
+#headerContainerDash {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+  font-family: "Arimo";
+  color: #676767;
+}
+
+#mainDash {
+  // background-color: blue;
+  min-height: 70vh;
+  height: auto;
+  display: flex;
+  margin-top: 40px;
+  gap: 15px;
+}
+
+.columnDash {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  // background-color: red;
+
+  div {
+    background-color: #e7e7e7;
+    width: 100%;
+    border-radius: 15px;
+  }
+}
+
+//----------------------------------------------------------------------------------------
+#columnOne {
+  width: 9%;
+  height: auto;
+  /* Alterado para não forçar uma altura fixa */
+  display: flex;
+  // justify-content: center;
+  align-items: start;
+  // background-color: yellow;
+}
+
+#openTasks {
+  aspect-ratio: 1/1;
+  /* Mantém altura igual à largura */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: "Arimo";
+  color: #ae070e;
+
+  h2 {
+    font-size: 30px;
+    margin-top: 10px;
+  }
+
+  span {
+    font-size: 60px;
+    font-weight: 700;
+  }
+}
+
+//-----------------------------------------------------------------------------------------------
+#columnTwo {
+  width: 27%;
+  display: flex;
+
+  #totalMonth {
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    h2 {
+      font-size: 32px;
+      font-family: "Poppins";
+      color: #676767;
+    }
+
+    span {
+      font-size: 35px;
+      font-family: "Arimo";
+      color: #ae070e;
+      font-weight: 700;
+      margin-left: 10px;
+    }
+  }
+
+  #doneOnTime {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    font-size: 20px;
+    font-style: italic;
+    font-family: "Poppins";
+    color: #676767;
+
+    //CALMA
+    div {
+      aspect-ratio: 1/0.75;
+      /* Mantém altura igual à largura */
+    }
+  }
+
+  #closeToDeadline {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+    gap: 10px;
+
+    font-size: 20px;
+    font-family: "Arimo";
+    color: #676767;
+
+    .taskCloseDeadLine {
+      background-color: white;
+      display: flex;
+      justify-content: space-between;
+      padding: 12px 10px;
+
+      span {
+        padding: 3px 6px;
+        border-radius: 8px;
+        background-color: #676767;
+        font-size: 18px;
+        color: white;
+      }
+
+      a {
+        color: #676767;
+        font-weight: 600;
+      }
+    }
+  }
+}
+
+//-----------------------------------------------------------------------------------------
+#columnThree {
+  width: 36%;
+
+  #averageOpenTime {
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    white-space: pre; //Faz com que os espaços do paragrafo, fiquem exatamente como está no html.
+    font-family: 'Poppins';
+    font-weight: 700;
+    color: #676767;
+
+    h2 {
+      font-size: 32px;
+    }
+
+    p {
+      color: #ae070e;
+      font-size: 35px;
+    }
+
+    span {
+      font-size: 15px;
+    }
+  }
+
+  #efficiencyRate {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    font-family: 'Poppins';
+    font-style: italic;
+  }
+}
+
+#columnFour {
+  width: 28%;
+}

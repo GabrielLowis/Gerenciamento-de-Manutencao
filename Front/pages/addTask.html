@@ -8,7 +8,7 @@
     <!-- <script type="module" src="../scripts/index.js" defer></script> -->
     <script type="module" src="../scripts/addTask.js" defer></script>
     <link rel="stylesheet" href="../styles.css">
-    <title>Document</title>
+    <title>Adicionar Tarefa</title>
 </head>
 
 <body id="bodyAddTask">
@@ -258,7 +258,7 @@
         const selectRespon = document.querySelector("#selectRespon");
         const inputRespon = document.getElementById("inputRespon");
 
-        fetch(`http://10.116.75.167:3000/usersColab`)
+        fetch(`http://${ipServer}:3000/usersColab`)
             .then(response => {
                 if (response.status === 200) {
                     return response.json(); // Retorna o JSON para a próxima then
@@ -315,7 +315,7 @@
             const idCall = localStorage.getItem('idCall');
             console.log(idCall);
 
-            fetch(`http://10.116.75.167:3000/call/${idCall}`)
+            fetch(`http://${ipServer}:3000/call/${idCall}`)
                 .then(response => {
                     if (response.status === 200) {
                         return response.json(); // Retorna o JSON para a próxima then
@@ -344,7 +344,7 @@
 
 
 
-                        fetch(`http://10.116.75.167:3000/getImage/${call[0].id_image}`)
+                        fetch(`http://${ipServer}:3000/getImage/${call[0].id_image}`)
                             .then(response => {
                                 if (response.ok) {
                                     return response.blob(); // Obtém a imagem como um Blob

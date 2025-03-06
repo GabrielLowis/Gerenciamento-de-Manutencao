@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en" id="htmlDash">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="../styles.css">
+    <title>DashBoard</title>
+</head>
+
+<body id="bodyDash">
+    <header>
+        <img src="https://logodownload.org/wp-content/uploads/2016/10/sesi-logo.png" alt="Logo do Sesi">
+    </header>
+
+    <div id="containerDash">
+        <div id="headerContainerDash">
+            <h1>Painel de controle</h1>
+
+            <h2>Voltar</h2>
+        </div>
+
+        <main id="mainDash">
+            <div class="columnDash" id="columnOne">
+                <div id="openTasks">
+                    <h2>Abertos</h2>
+                    <span>14</span>
+                </div>
+            </div>
+
+            <div class="columnDash" id="columnTwo">
+                <div id="totalMonth">
+                    <h2>Total do Mês:</h2>
+                    <span>47</span>
+                </div>
+
+                <div id="doneOnTime">
+                    <h2>Realizados no prazo</h2>
+                    <div id="graphicDoneOnTime"></div>
+                </div>
+
+                <div id="closeToDeadline">
+                    <h2>Tarefas perto do prazo</h2>
+                    <div class="taskCloseDeadLine">
+                        <a href="">Trocar extintores</a>
+                        <span>01 / 02 / 2025</span>
+                    </div>
+
+                    <div class="taskCloseDeadLine">
+                        <a href="">Trocar tomadas</a>
+                        <span>05 / 03 / 2025</span>
+                    </div> 
+
+                    <div class="taskCloseDeadLine">
+                        <a href="">Trocar cortinas</a>
+                        <span>30 / 03 / 2025</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="columnDash" id="columnThree">
+                <div id="averageOpenTime">
+                    <h2>Tempo médio aberto: </h2>
+                    <p> 1<span>D</span> 16<span>H</span></p>
+                </div>
+
+                <div id="efficiencyRate">
+                    <h2>Taxa de eficiência</h2>
+                </div>
+            </div>
+
+            <div class="columnDash" id="columnFour">
+            </div>
+        </main>
+    </div>
+
+</body>
+
+</html>
