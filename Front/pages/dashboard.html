@@ -6,6 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="../styles.css">
+    <script src="../scripts/dashBoard.js" defer></script>
+
+    <!-- Importando biblioteca para os graficos  -->
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <title>DashBoard</title>
 </head>
 
@@ -50,7 +54,7 @@
                     <div class="taskCloseDeadLine">
                         <a href="">Trocar tomadas</a>
                         <span>05 / 03 / 2025</span>
-                    </div> 
+                    </div>
 
                     <div class="taskCloseDeadLine">
                         <a href="">Trocar cortinas</a>
@@ -67,14 +71,93 @@
 
                 <div id="efficiencyRate">
                     <h2>Taxa de eficiência</h2>
+                    <div id="graphicEfficiencyRate"></div>
+                </div>
+
+                <div id="tasksCalendar">
+                    <div id="calendar">
+                        <div id="containerMonth">
+                            <p id="month"></p> <!-- O mês será preenchido dinamicamente -->
+                        </div>
+                        <div id="weekdays">
+                            <p>DOM</p>
+                            <p>SEG</p>
+                            <p>TER</p>
+                            <p>QUA</p>
+                            <p>QUI</p>
+                            <p>SEX</p>
+                            <p>SAB</p>
+                        </div>
+                        <div id="days"></div> <!-- Aqui os dias do mês serão inseridos -->
+                    </div>
+                    <div id="topicsCalendar">
+                        <div class="topic">
+                            <span>11</span>
+                            <a>Título da tarefa para o fulano ver oque tem que fazer</a>
+                        </div>
+
+                        <div class="topic">
+                            <span>10</span>
+                            <a>Título da tarefa para o fulano ver oque tem que fazer</a>
+                        </div>
+
+                        <div class="topic">
+                            <span>10</span>
+                            <a>Título da tarefa para o fulano ver oque tem que fazer</a>
+                        </div>
+
+                        <div class="topic">
+                            <span>10</span>
+                            <a>Título da tarefa para o fulano ver oque tem que fazer</a>
+                        </div>
+
+                        <div class="topic">
+                            <span>10</span>
+                            <a>Título da tarefa para o fulano ver oque tem que fazer</a>
+                        </div>
+
+                        <div class="topic">
+                            <span>10</span>
+                            <a>Título da tarefa para o fulano ver oque tem que fazer</a>
+                        </div>
+
+                        <div class="topic">
+                            <span>12</span>
+                            <a>Título da tarefa para o fulano ver oque tem que fazer</a>
+                        </div>
+                    </div>
                 </div>
             </div>
 
             <div class="columnDash" id="columnFour">
+                <div id="RankingColabs">
+                    <h2>Ranking dos colabs.</h2>
+                    <div id="captionRanking">
+                        <p>Tarefas / Realizadas / Arquivadas / Tempo</p>
+                    </div>
+
+                    <div class="colab">
+                        <div class="nameColab">
+                            <img src="../assets/imgs/Foto de perfil para redes sociais gradiente simples.png" alt="">
+                            <p>Jhonatan</p>
+                        </div>
+                        <div class="statesColab">
+                            <p>
+                                <span>12</span>
+                                /
+                                <span>12</span>
+                                /
+                                <span>12</span>
+                                /
+                                <span>12</span>
+                            </p>
+                        </div>
+                    </div>
+
+                </div>
             </div>
         </main>
     </div>
-
 </body>
 
 </html>

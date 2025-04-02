@@ -185,15 +185,231 @@
   }
 
   #efficiencyRate {
+    height: 375px;
     display: flex;
     flex-direction: column;
     align-items: center;
 
     font-family: 'Poppins';
     font-style: italic;
+    color: #676767;
+
+    h2 {
+      font-size: 30px;
+    }
+  }
+
+  #tasksCalendar {
+    height: 260px;
+    display: flex;
+    padding: 15px;
+    gap: 15px;
+
+    #calendar {
+      background-color: white;
+      width: 65%;
+      padding: 3px 10px;
+
+      #containerMonth {
+        background-color: rgba(255, 255, 255, 0);
+
+        font-family: 'Poppins';
+        font-weight: 700;
+        font-style: italic;
+      }
+
+      #weekdays {
+        background-color: black;
+        display: flex;
+        width: 100%;
+        height: 25px;
+        justify-content: space-evenly;
+        align-items: center;
+
+        font-family: 'Open Sans';
+        font-weight: 700;
+        font-size: 14px;
+        color: white;
+      }
+
+    }
+
+    #topicsCalendar {
+      // background-color: blue;
+      width: 35%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 20px;
+      padding-top: 120px;
+      overflow-y: scroll;
+
+      //Deixar o scroll invisivel
+      scrollbar-width: none;
+      /* Firefox */
+      -ms-overflow-style: none;
+      /* Internet Explorer e Edge */
+
+      .topic {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+
+        font-family: 'Poppins';
+        font-weight: 700;
+
+        span {
+          background-color: #ff4c53;
+          width: 30px;
+          height: 30px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border-radius: 50%;
+        }
+
+        // overflow: hidden; /* Garante que o texto não ultrapasse os limites */
+      }
+
+      .topic a {
+        flex: 1;
+        /* Faz com que o parágrafo ocupe o máximo de espaço disponível */
+        white-space: nowrap;
+        /* Impede que o texto quebre linha */
+        overflow: hidden;
+        /* Esconde o que ultrapassa a largura */
+        text-overflow: ellipsis;
+        /* Adiciona os "..." quando o texto for cortado */
+        text-decoration: underline;
+        cursor: pointer;
+      }
+    }
+
+    #topicsCalendar::-webkit-scrollbar {
+      display: none;
+      /* Chrome, Safari e Edge */
+    }
   }
 }
 
+//----------------------------------------------------------------------------------------------------------------
+
 #columnFour {
   width: 28%;
+}
+
+#RankingColabs {
+  // background-color: red;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px;
+
+  font-family: 'Arimo';
+  font-size: 20px;
+  color: #676767;
+
+  #captionRanking {
+    background-color: #b9b9b9ed;
+    // width: 90%;
+    display: flex;
+    justify-content: center;
+    margin: 5px 0 15px 0;
+    border-radius: 0;
+
+    p {
+      color: #676767;
+      font-weight: 700;
+      font-size: 17px;
+    }
+  }
+
+  .colab {
+    background-color: #8DFF5E;
+    width: 100%;
+    height: 45px;
+    display: flex;
+    border-radius: 7px;
+  }
+
+  .nameColab {
+    // background-color: rgba(0, 128, 0, 0.395);
+    background-color: rgba(255, 255, 255, 0);
+    display: flex;
+    align-items: center;
+    padding-left: 10px;
+    gap: 10px;
+
+    font-weight: 700;
+
+    img {
+      width: 30px;
+      border-radius: 100px;
+    }
+  }
+
+  .statesColab {
+    background-color: rgba(255, 255, 255, 0);
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    margin-right: 10px;
+    font-weight: 700;
+  }
+}
+
+
+//-------- CALENDARIO -----------------------------------------------
+//-------- CALENDARIO -----------------------------------------------
+//-------- CALENDARIO -----------------------------------------------
+//-------- CALENDARIO -----------------------------------------------
+//-------- CALENDARIO -----------------------------------------------
+//-------- CALENDARIO -----------------------------------------------
+//-------- CALENDARIO -----------------------------------------------
+
+
+#days {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 5px;
+  margin-top: 10px;
+}
+
+.day,
+.empty-day {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: 50% !important;
+  cursor: pointer;
+}
+
+.empty-day {
+  background: none;
+  pointer-events: none;
+}
+
+.day {
+  // background-color: #f1f1f1;
+  color: black;
+}
+
+.day:hover {
+  background-color: #ddd;
+}
+
+.past-day {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.selected {
+  background-color: #ff4c53 !important;
+  color: white;
 }

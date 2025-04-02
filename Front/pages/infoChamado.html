@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <script type="module" src="../ipConfig.js" defer></script>
     <link rel="stylesheet" href="../styles.css">
     <title>Chamado</title>
     <style>
@@ -143,7 +144,9 @@
 
     </script>
 
-    <script>
+    <script type="module">
+        import { ipServer } from '../ipConfig.js';
+        console.log("IP do Servidor:", ipServer);
         window.onload = () => {
             const idCall = localStorage.getItem('idCall');
             console.log(idCall);
@@ -195,7 +198,9 @@
         }
     </script>
 
-    <script>
+    <script type="module">
+        import { ipServer } from '../ipConfig.js';
+        console.log("IP do Servidor:", ipServer);
         function updateCall() {
             const idCall = localStorage.getItem('idCall');
             const inputSala = document.querySelector("#inputRespon").value;
@@ -235,7 +240,9 @@
         }
     </script>
 
-    <script>
+    <script type="module">
+        import { ipServer } from '../ipConfig.js';
+        console.log("IP do Servidor:", ipServer);
         const btnAdicionar = document.querySelector('#addTaskAdicionar');
 
         btnAdicionar.addEventListener('click', () => {

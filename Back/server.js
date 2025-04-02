@@ -21,7 +21,7 @@ app.use(express.json());
 // Rotas
 // ---------------------------------
 app.get("/", (req, res) => {
-    connection.query("SELECT COUNT(*) users FROM users", (err, results) => {
+    connection.query("SELECT COUNT(*) i FROM users", (err, results) => {
         if (err) {
             return res.status(500).send('MySQL Connection error');
         }

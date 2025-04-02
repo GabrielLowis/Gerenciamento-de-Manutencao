@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <script type="module" src="../ipConfig.js" defer></script>
     <!-- <script type="module" src="../scripts/index.js" defer></script> -->
     <link rel="stylesheet" href="../styles.css">
     <title>Chamados Abertos</title>
@@ -60,7 +61,7 @@
             cursor: pointer;
         }
 
-        #containerAllTask{
+        #containerAllTask {
             min-height: 80vh;
             height: auto;
         }
@@ -69,20 +70,19 @@
             margin-right: 25px;
         }
 
-        #tableTitle{
-            .tarefas{
+        #tableTitle {
+            .tarefas {
                 min-width: 120px;
                 max-width: 125px !important;
                 width: 0%;
                 /* background-color: red; */
             }
 
-            .status{
+            .status {
                 min-width: 80px;
                 width: 0%;
             }
         }
-
     </style>
 </head>
 
@@ -113,7 +113,7 @@
                 </div>
             </section>
 
-            
+
             <section id="tableTasks">
                 <table id="tasks">
                     <tr id="tableTitle">
@@ -135,16 +135,18 @@
         </div>
     </main>
 
-    <script>
+    <script type="module">
+        import { ipServer } from '../ipConfig.js';
+        console.log("IP do Servidor:", ipServer);
         // function storeTaskId(id) {
         //     console.log("Armazenando ID da tarefa: ", id); // Verifica se o ID está sendo passado corretamente
         //     localStorage.setItem('taskId', id);
         // }
 
-        function storageCall(id) {
+        window.storageCall = function (id) {
             localStorage.setItem('idCall', id);
             window.location.href = `http://${ipServer}:13542/Front/pages/infoChamado.html`;
-        }
+        };
 
         window.onload = () => {
             fetch(`http://${ipServer}:3000/calls`)
@@ -195,32 +197,32 @@
                             callsTable.innerHTML += htmlCall;
                         })
                     }
-                        // Evento para abrir o modal ao clicar na imagem
-                        const modal = document.getElementById("imageModal");
-                        const modalImg = document.getElementById("modalImage");
-                        const captionText = document.getElementById("caption");
-                
-                        const images = document.querySelectorAll('.callImage');
-                        images.forEach(image => {
-                            image.addEventListener('click', function () {
-                                modal.style.display = "block";
-                                modalImg.src = this.src;
-                                captionText.innerHTML = this.alt; // Exibe o texto alternativo da imagem
-                            });
+                    // Evento para abrir o modal ao clicar na imagem
+                    const modal = document.getElementById("imageModal");
+                    const modalImg = document.getElementById("modalImage");
+                    const captionText = document.getElementById("caption");
+
+                    const images = document.querySelectorAll('.callImage');
+                    images.forEach(image => {
+                        image.addEventListener('click', function () {
+                            modal.style.display = "block";
+                            modalImg.src = this.src;
+                            captionText.innerHTML = this.alt; // Exibe o texto alternativo da imagem
                         });
-                
-                        // Evento para fechar o modal ao clicar no ícone de fechar
-                        const closeModal = document.getElementById("closeModal");
-                        closeModal.addEventListener('click', function () {
+                    });
+
+                    // Evento para fechar o modal ao clicar no ícone de fechar
+                    const closeModal = document.getElementById("closeModal");
+                    closeModal.addEventListener('click', function () {
+                        modal.style.display = "none";
+                    });
+
+                    // Fecha o modal ao clicar fora da imagem
+                    window.addEventListener('click', function (event) {
+                        if (event.target === modal) {
                             modal.style.display = "none";
-                        });
-                
-                        // Fecha o modal ao clicar fora da imagem
-                        window.addEventListener('click', function (event) {
-                            if (event.target === modal) {
-                                modal.style.display = "none";
-                            }
-                        });
+                        }
+                    });
                 })
         }
 
