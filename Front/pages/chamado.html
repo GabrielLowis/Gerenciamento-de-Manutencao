@@ -57,7 +57,7 @@
         import { ipServer } from '../ipConfig.js';
         console.log("IP do Servidor:", ipServer);
 
-        
+
         const img = document.getElementById("imgUpload");
         const fileInput = document.getElementById("fileInput");
         const addTaskAdicionar = document.getElementById("addTaskAdicionar");
@@ -87,7 +87,7 @@
             const descricao = document.getElementById("descricao").value;
 
             console.log(inputSala + descricao);
-            
+
 
             if (!selectedFile) {
                 alert("Por favor, selecione uma imagem.");
@@ -120,7 +120,11 @@
                 const response = await fetch(`http://${ipServer}:3000/createCall/`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ imageId, inputSala, descricao }),
+                    body: JSON.stringify({
+                        id_image: imageId,
+                        sala: inputSala,
+                        text: descricao
+                    }),
                 });
 
                 if (response.ok) {
@@ -129,7 +133,7 @@
                     console.log('Novo chamado criado:', dados);
                     document.getElementById("inputRespon").value = "";
                     document.getElementById("descricao").value = "";
-                    img.src = "https://thumbs.dreamstime.com/b/tomada-el%C3%A9trica-quebrada-perigosa-que-cai-da-parede-fechar-284203756.jpg"; 
+                    img.src = "https://thumbs.dreamstime.com/b/tomada-el%C3%A9trica-quebrada-perigosa-que-cai-da-parede-fechar-284203756.jpg";
                     selectedFile = null;
                 } else {
                     alert('Erro ao criar o chamado');

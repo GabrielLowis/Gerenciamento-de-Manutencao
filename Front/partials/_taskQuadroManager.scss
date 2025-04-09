@@ -8,14 +8,14 @@
     // overflow-y: auto; 
 }
 
-#sectionHeaderQuadro{
+#sectionHeaderQuadro {
     margin: 15px;
 }
 
 /* Container que engloba as tarefas e o conteúdo principal */
 #containerAllTask {
     width: 95%;
-    height: auto; 
+    height: auto;
     margin-top: 10vh;
     border-radius: 35px;
     padding: 25px 0;
@@ -26,6 +26,7 @@
 
 /* Navegação entre as seções 'Todos' e 'Quadro' */
 #navAllTask {
+
     /* Seleção do primeiro item da navegação (destaque visual) */
     .itemNavTask:nth-child(2) {
         color: black;
@@ -44,34 +45,34 @@
     align-items: flex-start;
 }
 
-.quadroManager{
+.quadroManager {
     padding-bottom: 100px;
 }
 
-#container{
+#container {
     // background-color: rgb(255, 156, 156);
     border-radius: 15px;
     padding: 10px;
     color: white;
 
-    h3{
+    h3 {
         color: black;
     }
 
-    a{
+    a {
         color: white;
     }
 
-    .tarefas{
+    .tarefas {
         // border: 2px solid yellow;
         margin-left: 2px;
     }
 
-    .responsavel{
+    .responsavel {
         max-width: 70px;
     }
 
-    .alta{
+    .alta {
         background-color: #a61010;
         padding: 3px 8px;
         border-radius: 4px;
@@ -83,7 +84,7 @@
         text-align: center;
     }
 
-    .media{
+    .media {
         background-color: #965f00;
         padding: 3px 8px;
         border-radius: 4px;
@@ -95,12 +96,12 @@
         text-align: center;
     }
 
-    .baixa{
+    .baixa {
         background-color: #1c7820;
         padding: 3px 8px;
         border-radius: 4px;
         max-width: 55px;
-        margin-left: 5px; 
+        margin-left: 5px;
         font-family: 'Arimo';
         font-weight: 700;
         font-size: 14px;
@@ -109,7 +110,7 @@
 }
 
 //Estilos para a aba de FAZER
-.taskFazer{
+.taskFazer {
     background-color: #ff0000;
     height: 100px;
     display: flex;
@@ -121,7 +122,7 @@
 }
 
 //Estilos para a aba de Andamento
-.taskAndamento{
+.taskAndamento {
     background-color: #ffa100;
     height: 100px;
     display: flex;
@@ -133,7 +134,7 @@
 }
 
 //Estilos para a aba de concluida
-.taskConcluida{
+.taskConcluida {
     background-color: #00a007;
     height: 100px;
     display: flex;
@@ -145,7 +146,7 @@
 }
 
 //Estilos para a aba de arquivados
-.taskArquivada{
+.taskArquivada {
     background-color: #535353;
     height: 100px;
     display: flex;
@@ -156,7 +157,7 @@
     margin: 10px 0;
 }
 
-#headerFazer{
+#headerFazer {
     display: flex;
     width: 100%;
     gap: 15px;
@@ -167,44 +168,44 @@
     text-align: center;
 }
 
-.fazer{
+.fazer {
     background-color: #f58383;
 }
 
-.andamento{
+.andamento {
     background-color: #ffd895;
 }
 
-.concluida{
+.concluida {
     background-color: #c6ffc9;
 }
 
-.arquivada{
+.arquivada {
     background-color: #cecece;
 }
 
-div.fazer{
+div.fazer {
     width: 24.5%;
     min-width: 276px;
 }
 
-div.andamento{
+div.andamento {
     width: 24.5%;
     min-width: 276px;
 }
 
-div.concluida{
+div.concluida {
     width: 24.5%;
     min-width: 276px;
 }
 
-div.arquivada{
+div.arquivada {
     width: 24.5%;
     min-width: 276px;
 }
 
 //Estilos para os botões de adicionar tarefa
-#AddFazer{
+#AddFazer {
     background-color: #f58383;
     display: flex;
     align-items: center;
@@ -215,10 +216,10 @@ div.arquivada{
     gap: 5px;
 }
 
-#container.fazer{
+#container.fazer {
     position: relative;
 
-    #linkAddFazer{
+    #linkAddFazer {
         position: absolute;
         top: 103%;
         left: 1%;
@@ -228,14 +229,14 @@ div.arquivada{
         font-family: 'Poppins';
         font-size: 12px;
 
-        i{
+        i {
             font-size: 25px;
         }
     }
 }
 
 
-#AddAndamento{
+#AddAndamento {
     background-color: #ffd895;
     display: flex;
     align-items: center;
@@ -246,10 +247,10 @@ div.arquivada{
     gap: 5px;
 }
 
-#container.andamento{
+#container.andamento {
     position: relative;
 
-    #linkAddAndamento{
+    #linkAddAndamento {
         position: absolute;
         top: 102%;
         left: 1%;
@@ -259,14 +260,14 @@ div.arquivada{
         font-family: 'Poppins';
         font-size: 12px;
 
-        i{
+        i {
             font-size: 25px;
         }
     }
 }
 
 
-#AddConcluida{
+#AddConcluida {
     background-color: #c6ffc9;
     display: flex;
     align-items: center;
@@ -277,10 +278,10 @@ div.arquivada{
     gap: 5px;
 }
 
-#container.concluida{
+#container.concluida {
     position: relative;
 
-    #linkAddConcluida{
+    #linkAddConcluida {
         position: absolute;
         top: 103%;
         left: 1%;
@@ -290,14 +291,14 @@ div.arquivada{
         font-family: 'Poppins';
         font-size: 12px;
 
-        i{
+        i {
             font-size: 25px;
         }
     }
 }
 
 
-#AddArquivada{
+#AddArquivada {
     background-color: #cecece;
     display: flex;
     align-items: center;
@@ -308,10 +309,10 @@ div.arquivada{
     gap: 5px;
 }
 
-#container.arquivada{
+#container.arquivada {
     position: relative;
 
-    #linkAddArquivada{
+    #linkAddArquivada {
         position: absolute;
         top: 105%;
         left: 1%;
@@ -321,7 +322,7 @@ div.arquivada{
         font-family: 'Poppins';
         font-size: 12px;
 
-        i{
+        i {
             font-size: 25px;
         }
     }
@@ -337,60 +338,73 @@ div.arquivada{
 
 
 
-span.fazer{
+span.fazer {
     background-color: #e80707;
     padding: 2px 10px;
     border-radius: 15px;
     font-size: 15px;
+
+    color: white;
+    font-weight: 700;
+    font-family: "Arimo";
 }
 
-span.andamento{
+span.andamento {
     background-color: #e89507;
     padding: 2px 10px;
     border-radius: 15px;
     font-size: 15px;
     white-space: nowrap;
+
+    color: white;
+    font-weight: 700;
+    font-family: "Arimo";
 }
 
-span.concluida{
+span.concluida {
     background-color: #2bb631;
     padding: 2px 10px;
     border-radius: 15px;
     font-size: 15px;
+
+    color: white;
+    font-weight: 700;
+    font-family: "Arimo";
 }
 
-span.arquivada{
+span.arquivada {
     background-color: #676767;
     padding: 2px 10px;
     border-radius: 15px;
     font-size: 15px;
+
+    color: white;
+    font-weight: 700;
+    font-family: "Arimo";
 }
 
-@media (max-width: 1200px){
-    div.fazer{
-        margin: 0 5px;    
+
+@media (max-width: 1200px) {
+    div.fazer {
+        margin: 0 5px;
     }
-    
-    div.andamento{
-        margin: 0 5px;    
-        
+
+    div.andamento {
+        margin: 0 5px;
+
     }
-    
-    div.concluida{
-        margin: 0 5px;    
-        
+
+    div.concluida {
+        margin: 0 5px;
+
     }
-    
-    div.arquivada{
-        margin: 0 5px;    
-        
+
+    div.arquivada {
+        margin: 0 5px;
+
     }
-    
-    .quadroManager{
+
+    .quadroManager {
         padding: 25px 0 85px 4px !important;
     }
 }
-
-
-
-

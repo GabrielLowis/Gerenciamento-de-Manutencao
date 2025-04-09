@@ -14,26 +14,26 @@ img.addEventListener("click", () => fileInput.click());
 
 // Atualiza a imagem localmente
 fileInput.addEventListener("change", (event) => {
-    selectedFile = event.target.files[0]; // Armazena o arquivo selecionado
+    selectedFile = event.target.files[0];
     if (selectedFile) {
         const reader = new FileReader();
         reader.onload = (e) => {
-            img.src = e.target.result; // Atualiza a imagem localmente
+            img.src = e.target.result;
         };
         reader.readAsDataURL(selectedFile);
     }
 });
 
-// Clique no link "Adicionar"
+// Clique no botão "Adicionar"
 addTaskAdicionar.addEventListener("click", async (event) => {
-    event.preventDefault(); // Impede o comportamento padrão do link
+    event.preventDefault();
 
     const urlParams = new URLSearchParams(window.location.search);
 
-    // Verifica se o parâmetro 'source' tem o valor 'openCalls'
+    // Caso vindo da tela de infoChamado
     if (urlParams.get('source') === 'infoChamado') {
         const idImg = localStorage.getItem('idImage');
-        imageId = idImg
+        imageId = idImg;
         console.log('idImagem:' + imageId);
         createTask(idUser);
     } else {
@@ -41,79 +41,78 @@ addTaskAdicionar.addEventListener("click", async (event) => {
             alert("Por favor, selecione uma imagem.");
             return;
         }
-    
-        // Cria o FormData com a imagem
+
+        // Enviar imagem
         const formData = new FormData();
-        formData.append("image", selectedFile); // Envia apenas a imagem
-    
+        formData.append("image", selectedFile);
+
         try {
             const response = await fetch(`http://${ipServer}:3000/upload-image`, {
                 method: "POST",
                 body: formData,
             });
-    
+
             if (response.ok) {
                 const result = await response.json();
-                imageId = result.imageId; // Armazena o ID na variável global
-                // alert("Imagem enviada com sucesso! ID: " + imageId);
+                imageId = result.imageId;
                 console.log("imagem: " + imageId);
-    
                 createTask(idUser);
-    
             } else {
                 alert("Erro ao enviar imagem.");
             }
         } catch (error) {
             console.error("Erro ao conectar ao servidor:", error);
-            alert("Err  o ao enviar a imagem.");
+            alert("Erro ao enviar a imagem.");
         }
     }
 });
 
 
-
-
 // ----------------------------
 function createTask(idUser) {
-    console.log(idUser);
-
+    console.log("idUser:", idUser);
 
     let inputTitle = document.getElementById("inputNameTask").value;
 
-    let statusSpan = document.getElementById("statusSpan");
-    statusSpan = statusSpan.textContent.charAt(0).toLowerCase() + statusSpan.textContent.slice(1);
+    let statusSpan = document.getElementById("statusSpan").textContent.trim();
+    statusSpan = statusSpan.charAt(0).toLowerCase() + statusSpan.slice(1);
 
-    let prioSpan = document.getElementById("prioSpan");
-    prioSpan = prioSpan.textContent.charAt(0).toLowerCase() + prioSpan.textContent.slice(1);
+    let prioSpan = document.getElementById("prioSpan").textContent.trim();
+    prioSpan = prioSpan.charAt(0).toLowerCase() + prioSpan.slice(1);
 
-    let inputRespon = document.getElementById("inputRespon").value;
+    let inputRespon = document.getElementById("inputRespon").value.trim();
     inputRespon = inputRespon.charAt(0).toLowerCase() + inputRespon.slice(1);
 
-    let inputSala = document.getElementById("inputSala").value;
-
+    let inputSala = document.getElementById("inputSala").value.trim();
     let inputData = document.getElementById("inputData").value;
-    function converterParaDataBrasileira(dataISO) {
-        const [ano, mes, dia] = dataISO.split('-');
-        return `${dia}/${mes}/${ano}`;
-    }
-    inputData = converterParaDataBrasileira(inputData);
+    let descricao = document.getElementById("descricao").value.trim();
 
-    let descricao = document.getElementById("descricao").value;
+    // Converter para Date padrão MongoDB
+    const dataFormatada = new Date(inputData);
 
-    // Fazer a requisição para criar uma nova tarefa
-    fetch(`http://${ipServer}:3000/user/${idUser}/tasks/createTask/`, {
+    const taskData = {
+        id_user: idUser,
+        task_title: inputTitle,
+        task_status: statusSpan,
+        task_prior: prioSpan,
+        task_prazo: dataFormatada,
+        task_sala: inputSala,
+        task_respon: inputRespon,
+        task_text: descricao,
+        id_image: imageId,
+      };
+      
+
+    fetch(`http://${ipServer}:3000/user/${idUser}/tasks/createTask`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ idUser, inputTitle, statusSpan, prioSpan, inputData, inputSala, inputRespon, descricao, imageId })
+        body: JSON.stringify(taskData)
     })
-        .then(response => {
+        .then(async (response) => {
             if (response.status === 200) {
-                console.log('teste imagem: ' + imageId);
                 alert('Tarefa criada com sucesso');
-
                 const urlParams = new URLSearchParams(window.location.search);
 
-                // Verifica se o parâmetro 'source' tem o valor 'taskManager'
                 if (urlParams.get('source') === 'taskManager') {
                     window.location.href = `http://${ipServer}:13542/Front/pages/taskManager.html`;
                 }
@@ -122,16 +121,20 @@ function createTask(idUser) {
                     window.location.href = `http://${ipServer}:13542/Front/pages/taskColab.html`;
                 }
 
-                return response.json();
+                return await response.json();
             } else {
                 alert('Erro ao criar a tarefa');
                 throw new Error('Erro ao criar a tarefa');
             }
         })
-        .then(dados => {
+        .then((dados) => {
             console.log('Nova tarefa criada:', dados);
+        })
+        .catch((err) => {
+            console.error("Erro na criação da tarefa:", err);
         });
 }
+
 
 function deleteCall() {
     const idCall = localStorage.getItem('idCall');
@@ -166,7 +169,7 @@ document.getElementById('addTaskAdicionar').addEventListener('click', () => {
     if (urlParams.get('source') === 'infoChamado') {
         // createTask(idUser);
         deleteCall()
-            
+
         window.location.href = `http://${ipServer}:13542/Front/pages/openCalls.html`;
     }
 

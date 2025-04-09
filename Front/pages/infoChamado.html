@@ -147,55 +147,49 @@
     <script type="module">
         import { ipServer } from '../ipConfig.js';
         console.log("IP do Servidor:", ipServer);
+
         window.onload = () => {
             const idCall = localStorage.getItem('idCall');
-            console.log(idCall);
+            console.log("ID do chamado:", idCall);
 
             fetch(`http://${ipServer}:3000/call/${idCall}`)
                 .then(response => {
                     if (response.status === 200) {
-                        return response.json(); // Retorna o JSON para a próxima then
+                        return response.json(); // Retorna um objeto, não um array
                     } else {
                         console.error('Erro na resposta da API:', response.status);
-                        throw new Error('Erro ao buscar dados'); // Lança erro para ser tratado no catch
+                        throw new Error('Erro ao buscar dados');
                     }
                 })
                 .then(call => {
-                    if (call.length === 0) {
-                        console.log('Não existem Chamados');
-                    } else {
-                        const inputSala = document.querySelector("#inputRespon");
-                        const descricao = document.getElementById('descricao');
+                    const inputSala = document.querySelector("#inputRespon");
+                    const descricao = document.getElementById('descricao');
 
-                        inputSala.value = call[0].sala;
-                        descricao.value = call[0].text;
+                    inputSala.value = call.sala;
+                    descricao.value = call.text;
 
-                        fetch(`http://${ipServer}:3000/getImage/${call[0].id_image}`)
-                            .then(response => {
-                                if (response.ok) {
-                                    return response.blob(); // Obtém a imagem como um Blob
-                                } else {
-                                    throw new Error("Erro ao buscar a imagem");
-                                }
-                            })
-                            .then(blob => {
-                                const url = URL.createObjectURL(blob); // Cria uma URL para o Blob
-                                const imgTag = document.querySelector("#imgUpload");
-                                imgTag.src = url; // Define o src da tag <img>
-                            })
-                            .catch(error => {
-                                console.error("Erro ao carregar a imagem:", error);
-                            });
+                    fetch(`http://${ipServer}:3000/getImage/${call.id_image}`)
+                        .then(response => {
+                            if (response.ok) {
+                                return response.blob();
+                            } else {
+                                throw new Error("Erro ao buscar a imagem");
+                            }
+                        })
+                        .then(blob => {
+                            const url = URL.createObjectURL(blob);
+                            const imgTag = document.querySelector("#imgUpload");
+                            imgTag.src = url;
+                        })
+                        .catch(error => {
+                            console.error("Erro ao carregar a imagem:", error);
+                        });
 
-                        // Outros campos do chamado podem ser usados aqui
-                        // {call[0].id_image}, {call[0].sala}, {call[0].text}, etc.
-                    }
                 })
                 .catch(error => {
                     console.error('Erro ao processar os chamados:', error);
                 });
-
-        }
+        };
     </script>
 
     <script type="module">
@@ -206,11 +200,12 @@
             const inputSala = document.querySelector("#inputRespon").value;
             const descricao = document.getElementById('descricao').value;
 
-            fetch(`http://${ipServer}:3000/call/updateCall`, {
-                method: 'POST',
+            fetch(`http://${ipServer}:3000/call/updateCall/${idCall}`, {
+                method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ inputSala, descricao, idCall })
+                body: JSON.stringify({ inputSala, descricao })
             })
+
                 .then(response => {
                     if (response.status === 200) {
                         alert('Tarefa atualizada com sucesso')

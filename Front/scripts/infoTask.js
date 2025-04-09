@@ -2,8 +2,6 @@ import { ipServer } from "../ipConfig.js"; // Caminho para o arquivo com as conf
 let idUser = localStorage.getItem('idUser');
 let idTask;
 
-
-
 const img = document.getElementById("imgUpload");
 const fileInput = document.getElementById("fileInput");
 const addTaskAdicionar = document.getElementById("addTaskAdicionar");
@@ -31,108 +29,78 @@ fileInput.addEventListener("change", (event) => {
 
 window.onload = function () {
     idTask = localStorage.getItem('taskId');
-    console.log(idTask);
+    console.log("idTask: " + idTask);
 
-    getTask(idUser, idTask);
+    getTask(idTask);
 }
 
-
-// ----------------------------
-export function getTask(idUser, idTask) {
-    fetch(`http://${ipServer}:3000/user/${idUser}/tasks/${idTask}`)
+// ---------------------------------------------------------------------------------------
+export function getTask(idTask) {
+    fetch(`http://${ipServer}:3000/tasks/${idTask}`)
         .then(response => {
             if (response.status === 200) {
                 console.log('funcionou');
                 return response.json();
-
             } else {
                 console.log('nok');
             }
         })
         .then(tarefa => {
-            if (tarefa.length === 0) {
+            if (!tarefa || Object.keys(tarefa).length === 0) {
                 console.log('Não existe');
             } else {
                 console.log(tarefa);
 
-
-                if (tarefa.coment !== null) {
-                    // console.log(tarefa.coment);
+                if (tarefa.coment !== null && tarefa.coment !== undefined) {
+                    console.log("coment>>>", tarefa.coment);
 
                     const inputComentario = document.getElementById("inputComentario");
                     const valueComent = document.getElementById('valueComent');
-                    // console.log(inputComentario.style.display);
 
                     inputComentario.style.display = "flex";
                     valueComent.value = tarefa.coment;
-                    // console.log(valueComent);
-                    
-                    
                 }
-                
 
-                const inputTitle = document.getElementById("inputNameTask");
-                inputTitle.value = tarefa.task_title;
+                document.getElementById("inputNameTask").value = tarefa.task_title;
 
                 const statusSpan = document.getElementById("statusSpan");
-                statusSpan.textContent = tarefa.task_status.charAt(0).toUpperCase() + tarefa.task_status.slice(1); //Deixa o começo em maiusculo
-                statusSpan.classList.add(tarefa.task_status.replace(/\b(a|em)\b/g, '').trim()) //Tira o 'em' da classe
+                statusSpan.textContent = tarefa.task_status.charAt(0).toUpperCase() + tarefa.task_status.slice(1);
+                statusSpan.classList.add(tarefa.task_status.replace(/\b(a|em)\b/g, '').trim());
 
                 const prioSpan = document.getElementById("prioSpan");
-                prioSpan.textContent = tarefa.task_prior.charAt(0).toUpperCase() + tarefa.task_prior.slice(1);;
+                prioSpan.textContent = tarefa.task_prior.charAt(0).toUpperCase() + tarefa.task_prior.slice(1);
                 prioSpan.classList.add(tarefa.task_prior);
 
-                const inputSala = document.getElementById("inputSala");
-                inputSala.value = tarefa.task_sala;
+                document.getElementById("inputSala").value = tarefa.task_sala;
+                document.getElementById("inputRespon").value = tarefa.task_respon;
+                document.getElementById("inputData").value = tarefa.task_prazo.slice(0, 10);
+                document.getElementById("descricao").value = tarefa.task_text;
 
-                const inputRespon = document.getElementById("inputRespon");
-                inputRespon.value = tarefa.task_respon;
+                const idImage = tarefa.id_image;
 
-                const inputData = document.getElementById("inputData");
-                function converterParaISO(dataBr) {
-                    const [dia, mes, ano] = dataBr.split('/'); // Divide a string em partes
-                    return `${ano}-${mes}-${dia}`; // Reorganiza para o formato ISO
-                }
-                const data = converterParaISO(tarefa.task_prazo);
-                inputData.value = data;
-
-                const descricao = document.getElementById("descricao");
-                descricao.value = tarefa.task_text;
-
-
-
-                console.log(tarefa.id_image + "<-----");
-
-                idImage = tarefa.id_image;
-
-
-                return tarefa;
+                return { id_image: idImage };
             }
         })
         .then(image => {
-            // console.log(image.id_image);
+            if (!image || !image.id_image) return;
+
             fetch(`http://${ipServer}:3000/getImage/${image.id_image}`)
                 .then(response => {
                     if (response.ok) {
-                        return response.blob(); // Obtém a imagem como um Blob
+                        return response.blob();
                     } else {
                         throw new Error("Erro ao buscar a imagem");
                     }
                 })
                 .then(blob => {
-                    const url = URL.createObjectURL(blob); // Cria uma URL para o Blob
-                    const imgTag = document.querySelector("#imgUpload");
-                    imgTag.src = url; // Define o src da tag <img>
-                    console.log(imgTag.src);
+                    const url = URL.createObjectURL(blob);
+                    document.querySelector("#imgUpload").src = url;
+                    console.log("Imagem carregada:", url);
                 })
                 .catch(error => {
                     console.error("Erro ao carregar a imagem:", error);
                 });
-
-            // Outros campos do chamado podem ser usados aqui
-            // {call[0].id_image}, {call[0].sala}, {call[0].text}, etc.
-        }
-        )
+        })
         .catch(error => {
             console.error('Erro ao processar os chamados:', error);
         });
@@ -142,8 +110,11 @@ export function getTask(idUser, idTask) {
 
 
 
+
 // ----------------------------
 async function updateTask(idUser, idTask) {
+    console.log("idTask: >> " + idTask);
+
     let inputTitle = document.getElementById("inputNameTask").value;
 
     let statusSpan = document.getElementById("statusSpan");
@@ -164,40 +135,40 @@ async function updateTask(idUser, idTask) {
     inputData = converterParaDataBrasileira(inputData);
 
     let descricao = document.getElementById("descricao").value;
-    
+
     let inputComentario = document.getElementById("inputComentario");
-    const estilo = window.getComputedStyle(inputComentario); 
-    
+    const estilo = window.getComputedStyle(inputComentario);
+
     console.log(estilo.display);
-    
-    
-    
+
+
+
     if (estilo.display === 'flex') {
         let valueComent = document.getElementById("valueComent").value;
-        
+
         console.log(valueComent);
 
         fetch(`http://${ipServer}:3000/coment/${idTask}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ valueComent, idTask })
-        
-    })
-        .then(response => {
-            if (response.status === 200) {
-                alert('Tarefa atualizada com sucesso')
-                console.log('Tarefa atualizada com sucesso');
-                // return response.json();
-            } else {
-                alert('Erro ao atualizar a tarefa');
-                throw new Error('Erro ao atualizar a tarefa');
-            }
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ valueComent, idTask })
+
         })
-        
+            .then(response => {
+                if (response.status === 200) {
+                    alert('Tarefa atualizada com sucesso')
+                    console.log('Tarefa atualizada com sucesso');
+                    // return response.json();
+                } else {
+                    alert('Erro ao atualizar a tarefa');
+                    throw new Error('Erro ao atualizar a tarefa');
+                }
+            })
+
     }
 
 
-    console.log(idImage);
+    // console.log(idImage);
 
     if (!selectedFile) {
         console.log("Nenhuma imagem selecionada");

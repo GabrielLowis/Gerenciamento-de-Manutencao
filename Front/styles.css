@@ -365,6 +365,30 @@ header img {
 #tableTitle th:not(:last-child) {
   border-right: 2px solid #676767;
 }
+#tableTitle .tarefas {
+  width: 30%;
+  min-width: 330px;
+}
+#tableTitle .status {
+  width: 10%;
+  min-width: 129px;
+}
+#tableTitle .responsavel {
+  width: 10%;
+  min-width: 115px;
+}
+#tableTitle .prazo {
+  width: 10%;
+  min-width: 113px;
+}
+#tableTitle .prioridade {
+  width: 10%;
+  min-width: 114px;
+}
+#tableTitle .descricao {
+  width: 30%;
+  min-width: 337px;
+}
 
 /* Seleciona todos os cabeçalhos <th>, exceto o primeiro e o último */
 #tableTasks tr th:not(:first-child):not(:last-child) {
@@ -481,6 +505,29 @@ header img {
   background-color: #212121;
 }
 
+#selectOrderStatus {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 170px;
+  height: 200px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  padding: 20px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 15px;
+  z-index: 999;
+}
+#selectOrderStatus span {
+  display: flex;
+  justify-content: center;
+}
+
 @media (max-width: 1050px) {
   #headerAllTask a {
     margin-left: 10px;
@@ -540,6 +587,29 @@ header img {
   #navAllTask {
     gap: 25px;
     margin-right: 25px;
+  }
+  #selectOrderStatus {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    height: 220px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 15px;
+    z-index: 999;
+  }
+  #selectOrderStatus span {
+    display: flex;
+    justify-content: center;
+    cursor: pointer;
   }
 }
 @media (max-width: 375px) {
@@ -865,6 +935,9 @@ span.fazer {
   padding: 2px 10px;
   border-radius: 15px;
   font-size: 15px;
+  color: white;
+  font-weight: 700;
+  font-family: "Arimo";
 }
 
 span.andamento {
@@ -873,6 +946,9 @@ span.andamento {
   border-radius: 15px;
   font-size: 15px;
   white-space: nowrap;
+  color: white;
+  font-weight: 700;
+  font-family: "Arimo";
 }
 
 span.concluida {
@@ -880,6 +956,9 @@ span.concluida {
   padding: 2px 10px;
   border-radius: 15px;
   font-size: 15px;
+  color: white;
+  font-weight: 700;
+  font-family: "Arimo";
 }
 
 span.arquivada {
@@ -887,6 +966,9 @@ span.arquivada {
   padding: 2px 10px;
   border-radius: 15px;
   font-size: 15px;
+  color: white;
+  font-weight: 700;
+  font-family: "Arimo";
 }
 
 @media (max-width: 1200px) {
@@ -1425,12 +1507,14 @@ span.arquivada {
   font-family: "Poppins";
   font-weight: 700;
   font-style: italic;
+  font-size: 16px;
+  margin-left: 5px;
 }
 #columnThree #tasksCalendar #calendar #weekdays {
   background-color: black;
   display: flex;
   width: 100%;
-  height: 25px;
+  height: 20px;
   justify-content: space-evenly;
   align-items: center;
   font-family: "Open Sans";
@@ -1541,14 +1625,14 @@ span.arquivada {
 #days {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  gap: 5px;
+  gap: 0px;
   margin-top: 10px;
 }
 
 .day,
 .empty-day {
-  width: 40px;
-  height: 40px;
+  width: 35px !important;
+  height: 35px;
   display: flex;
   align-items: center;
   justify-content: center;

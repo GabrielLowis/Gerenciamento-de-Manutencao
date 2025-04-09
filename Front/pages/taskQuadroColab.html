@@ -167,7 +167,7 @@
         let idUser = localStorage.getItem('idUser');
 
         console.log('TESTE: ' + ipServer);
-        
+
 
         // window.editStatus = function (idTask) {
         //     console.log(idTask);
@@ -188,11 +188,11 @@
                     }
                 })
                 .then(data => {
-                    console.log(data[0].username);
-                    const username = data[0].username;
+                    console.log(data.username);
+                    const username = data.username;
                     const title = document.querySelector('#title');
                     title.textContent += ` - ${username.charAt(0).toUpperCase() + username.slice(1)}`;
-                    
+
                     getTask(username);
                 });
         }
@@ -226,7 +226,7 @@
                                     if (tarefa.task_status === "a fazer") {
                                         let htmlTaskQuadroFazer = `
                                 <div class="taskFazer">
-                                    <h2 class="tarefas">📺<a href="../pages/infoTask.html?source=taskQuadroColab" onclick="storeTaskId(${tarefa.id})">${tarefa.task_title}</a></h2>
+                                    <h2 class="tarefas"><a href="../pages/infoTask.html?source=taskQuadroColab" onclick="storeTaskId(${tarefa.id})">${tarefa.task_title}</a></h2>
                                     <h2 class="responsavel"><a href="#">${tarefa.task_respon.charAt(0).toUpperCase() + tarefa.task_respon.slice(1)}</a></h2>
                                     <span class="${tarefa.task_prior}">${tarefa.task_prior.charAt(0).toUpperCase() + tarefa.task_prior.slice(1)}</span>
                                 </div>
@@ -247,7 +247,7 @@
                                     if (tarefa.task_status === 'em andamento') {
                                         let htmlTaskQuadroAndamento = `
                                 <div class="taskAndamento">
-                                    <h2 class="tarefas">📺<a href="../pages/infoTask.html?source=taskQuadroColab" onclick="storeTaskId(${tarefa.id})">${tarefa.task_title}</a></h2>
+                                    <h2 class="tarefas"><a href="../pages/infoTask.html?source=taskQuadroColab" onclick="storeTaskId(${tarefa.id})">${tarefa.task_title}</a></h2>
                                     <h2 class="responsavel"><a href="#">${tarefa.task_respon.charAt(0).toUpperCase() + tarefa.task_respon.slice(1)}</a></h2>
                                     <span class="${tarefa.task_prior}">${tarefa.task_prior.charAt(0).toUpperCase() + tarefa.task_prior.slice(1)}</span>
                                 </div>
@@ -268,7 +268,7 @@
                                     if (tarefa.task_status === 'concluida') {
                                         let htmlTaskQuadroConcluido = `
                                 <div class="taskConcluida">
-                                    <h2 class="tarefas">📺<a href="../pages/infoTask.html?source=taskQuadroColab" onclick="storeTaskId(${tarefa.id})">${tarefa.task_title}</a></h2>
+                                    <h2 class="tarefas"><a href="../pages/infoTask.html?source=taskQuadroColab" onclick="storeTaskId(${tarefa.id})">${tarefa.task_title}</a></h2>
                                     <h2 class="responsavel"><a href="#">${tarefa.task_respon.charAt(0).toUpperCase() + tarefa.task_respon.slice(1)}</a></h2>
                                     <span class="${tarefa.task_prior}">${tarefa.task_prior.charAt(0).toUpperCase() + tarefa.task_prior.slice(1)}</span>
                                 </div>
@@ -288,8 +288,8 @@
                                     if (tarefa.task_status === 'arquivada') {
                                         let htmlTaskQuadroArquivado = `
                                 <div class="taskArquivada">
-                                    <h2 class="tarefas">📺<a href="../pages/infoTask.html?source=taskQuadroColab" onclick="storeTaskId(${tarefa.id})">${tarefa.task_title}</a></h2>
-                                    <h2 class="responsavel"><a href="#">${tarefa.task_respon.charAt(0).toUpperCase() + tarefa.task_respon.slice(1)  }</a></h2>
+                                    <h2 class="tarefas"><a href="../pages/infoTask.html?source=taskQuadroColab" onclick="storeTaskId(${tarefa.id})">${tarefa.task_title}</a></h2>
+                                    <h2 class="responsavel"><a href="#">${tarefa.task_respon.charAt(0).toUpperCase() + tarefa.task_respon.slice(1)}</a></h2>
                                     <span class="${tarefa.task_prior}">${tarefa.task_prior.charAt(0).toUpperCase() + tarefa.task_prior.slice(1)}</span>
                                 </div>
                             `;

@@ -1,3 +1,5 @@
+import { ipServer } from "../ipConfig.js"; // Caminho para o arquivo com as configurações do ip
+
 var options = {
     chart: {
         type: 'pie',
@@ -203,3 +205,18 @@ document.addEventListener("DOMContentLoaded", function () {
     // Gera o calendário
     generateCalendar(currentYear, currentMonth);
 });
+
+//----------------------------------------------------------------------------------------------------
+window.onload = () => {
+
+    fetch(`http://${ipServer}:3000/total-tasks`)
+        .then(res => res.json())
+        .then(data => {
+            const totalMonth = document.getElementById('spanTotalMonth');
+            totalMonth.innerHTML = `${data.total}`;
+        })
+        .catch(err => {
+            console.error('Erro ao buscar total:', err);
+        });
+
+}

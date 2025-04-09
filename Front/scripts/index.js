@@ -25,12 +25,10 @@ export function getUserName(idUser) {
         })
 }
 
-
-// if (nivel === 1) {
-
-// }
-
 // ----------------------------
+
+let tarefasOriginais = [];
+
 export function getUserTask() {
     fetch(`http://${ipServer}:3000/tasks`)
         .then(response => {
@@ -42,6 +40,9 @@ export function getUserTask() {
             }
         })
         .then(tarefas => {
+            tarefasOriginais = tarefas; // <- Aqui salvamos para usar depois
+
+
             if (tarefas.length === 0) {
                 document.querySelector('#tableTasks').style.display = 'none';
             } else {
@@ -52,14 +53,27 @@ export function getUserTask() {
 
                 console.log(tarefas.length);
 
-
+                function formatarData(dataISO) {
+                    const data = new Date(dataISO);
+                    const dia = String(data.getDate()).padStart(2, '0');
+                    const mes = String(data.getMonth() + 1).padStart(2, '0');
+                    const ano = data.getFullYear();
+                    return `${dia}/${mes}/${ano}`;
+                }
+                
+                
+                
                 tarefas.forEach(tarefa => {
-
+                    
+                    tarefa.task_prazo = formatarData(tarefa.task_prazo);
+                    console.log("ID DA TAREFA >> " + tarefa._id);
+                    
+                    
                     const tbody = document.querySelector('#tbody');
                     if (tbody) {
                         let htmlTask = `<tr>
-                                        <td class="tarefas"><a href="../pages/infoTask.html?source=taskManager" onclick="storeTaskId(${tarefa.id})">${tarefa.task_title}</a></td>
-                                        <td class="status" onclick="editStatus(${tarefa.id})" > <span class="${tarefa.task_status}">${tarefa.task_status.charAt(0).toUpperCase() + tarefa.task_status.slice(1)}</span></td>
+                                        <td class="tarefas"><a href="../pages/infoTask.html?source=taskManager" onclick="storeTaskId('${tarefa._id}')">${tarefa.task_title}</a></td>
+                                        <td class="status" onclick="editStatus(${tarefa._id})" > <span class="${tarefa.task_status}">${tarefa.task_status.charAt(0).toUpperCase() + tarefa.task_status.slice(1)}</span></td>
                                         <td class="responsavel"><a href="#">${tarefa.task_respon.charAt(0).toUpperCase() + tarefa.task_respon.slice(1)}</a></td>
                                         <td class="prazo"><span class="spanPrazo">${tarefa.task_prazo}</span></td>
                                         <td class="prioridade"><span class="${tarefa.task_prior}">${tarefa.task_prior.charAt(0).toUpperCase() + tarefa.task_prior.slice(1)}</span></td>
@@ -67,7 +81,7 @@ export function getUserTask() {
                                     </tr>`;
                                     tbody.innerHTML += htmlTask;
 
-                        console.log('idTask: ' + tarefa.id);
+                        console.log('idTask: ' + tarefa._id);
                     }
 
 
@@ -76,7 +90,7 @@ export function getUserTask() {
                         if (tarefa.task_status === "a fazer") {
                             let htmlTaskQuadroFazer = `
                                 <div class="taskFazer">
-                                    <h2 class="tarefas"><a href="../pages/infoTask.html?source=taskQuadroManager" onclick="storeTaskId(${tarefa.id})">${tarefa.task_title}</a></h2>
+                                    <h2 class="tarefas"><a href="../pages/infoTask.html?source=taskQuadroManager" onclick="storeTaskId('${tarefa._id}')">${tarefa.task_title}</a></h2>
                                     <h2 class="responsavel"><a href="#">${tarefa.task_respon.charAt(0).toUpperCase() + tarefa.task_respon.slice(1)}</a></h2>
                                     <span class="${tarefa.task_prior}">${tarefa.task_prior.charAt(0).toUpperCase() + tarefa.task_prior.slice(1)}</span>
                                 </div>
@@ -97,7 +111,7 @@ export function getUserTask() {
                         if (tarefa.task_status === 'em andamento') {
                             let htmlTaskQuadroAndamento = `
                                 <div class="taskAndamento">
-                                    <h2 class="tarefas"><a href="../pages/infoTask.html?source=taskQuadroManager" onclick="storeTaskId(${tarefa.id})">${tarefa.task_title}</a></h2>
+                                    <h2 class="tarefas"><a href="../pages/infoTask.html?source=taskQuadroManager" onclick="storeTaskId('${tarefa._id}')">${tarefa.task_title}</a></h2>
                                     <h2 class="responsavel"><a href="#">${tarefa.task_respon.charAt(0).toUpperCase() + tarefa.task_respon.slice(1)}</a></h2>
                                     <span class="${tarefa.task_prior}">${tarefa.task_prior.charAt(0).toUpperCase() + tarefa.task_prior.slice(1)}</span>
                                 </div>
@@ -118,7 +132,7 @@ export function getUserTask() {
                         if (tarefa.task_status === 'concluida') {
                             let htmlTaskQuadroConcluido = `
                                 <div class="taskConcluida">
-                                    <h2 class="tarefas"><a href="../pages/infoTask.html?source=taskQuadroManager" onclick="storeTaskId(${tarefa.id})">${tarefa.task_title}</a></h2>
+                                    <h2 class="tarefas"><a href="../pages/infoTask.html?source=taskQuadroManager" onclick="storeTaskId('${tarefa._id}')">${tarefa.task_title}</a></h2>
                                     <h2 class="responsavel"><a href="#">${tarefa.task_respon.charAt(0).toUpperCase() + tarefa.task_respon.slice(1)}</a></h2>
                                     <span class="${tarefa.task_prior}">${tarefa.task_prior.charAt(0).toUpperCase() + tarefa.task_prior.slice(1)}</span>
                                 </div>
@@ -138,7 +152,7 @@ export function getUserTask() {
                         if (tarefa.task_status === 'arquivada') {
                             let htmlTaskQuadroArquivado = `
                                 <div class="taskArquivada">
-                                    <h2 class="tarefas"><a href="../pages/infoTask.html?source=taskQuadroManager" onclick="storeTaskId(${tarefa.id})">${tarefa.task_title}</a></h2>
+                                    <h2 class="tarefas"><a href="../pages/infoTask.html?source=taskQuadroManager" onclick="storeTaskId('${tarefa._id}')">${tarefa.task_title}</a></h2>
                                     <h2 class="responsavel"><a href="#">${tarefa.task_respon.charAt(0).toUpperCase() + tarefa.task_respon.slice(1)}</a></h2>
                                       <span class="${tarefa.task_prior}">${tarefa.task_prior.charAt(0).toUpperCase() + tarefa.task_prior.slice(1)}</span>
                                 </div>
@@ -179,3 +193,80 @@ export function getUserTask() {
             }
         })
 }
+
+
+// FILTRO DE TABELA ---------------------------------------
+function renderizarTarefas(tarefas) {
+    const tbody = document.querySelector('#tbody');
+    tbody.innerHTML = ""; // Limpa a tabela
+
+    tarefas.forEach(tarefa => {
+        let htmlTask = `<tr>
+            <td class="tarefas"><a href="../pages/infoTask.html?source=taskManager" onclick="storeTaskId('${tarefa._id}')">${tarefa.task_title}</a></td>
+            <td class="status"><span class="${tarefa.task_status}">${tarefa.task_status.charAt(0).toUpperCase() + tarefa.task_status.slice(1)}</span></td>
+            <td class="responsavel"><a href="#">${tarefa.task_respon.charAt(0).toUpperCase() + tarefa.task_respon.slice(1)}</a></td>
+            <td class="prazo"><span class="spanPrazo">${tarefa.task_prazo}</span></td>
+            <td class="prioridade"><span class="${tarefa.task_prior}">${tarefa.task_prior.charAt(0).toUpperCase() + tarefa.task_prior.slice(1)}</span></td>
+            <td class="descricao">${tarefa.task_text}</td>
+        </tr>`;
+        tbody.innerHTML += htmlTask;
+    });
+}
+
+
+
+function ordenarPorStatus(ordem = "original") {
+    let tarefasOrdenadas = [...tarefasOriginais]; // Cópia para não alterar a original
+
+    if (ordem === "status") {
+        const statusOrder = ["a fazer", "em andamento", "concluida", "arquivada"];
+        tarefasOrdenadas.sort((a, b) => {
+            return statusOrder.indexOf(a.task_status) - statusOrder.indexOf(b.task_status);
+        });
+    }
+
+    renderizarTarefas(tarefasOrdenadas);
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    const selectOrdenar = document.getElementById("selectOrdenar");
+
+    if (selectOrdenar) {
+        selectOrdenar.addEventListener("change", (e) => {
+            ordenarPorStatus(e.target.value);
+        });
+    }
+});
+
+
+const modal = document.getElementById("modalStatus");
+
+const status = document.querySelector('.status');
+
+console.log(status);
+
+
+status.addEventListener("click", () => {
+    alert('oi')
+})
+
+
+function abrirModalStatus() {
+  modal.style.display = "flex";
+}
+
+// Ocultar modal ao clicar fora (opcional)
+document.addEventListener("click", (e) => {
+  if (!modal.contains(e.target) && e.target.id !== "botaoAbrir") {
+    modal.style.display = "none";
+  }
+});
+
+// Ativar clique nos <span>
+document.querySelectorAll(".opcao-status").forEach(span => {
+  span.addEventListener("click", () => {
+    const status = span.getAttribute("data-status");
+    console.log("Status selecionado:", status);
+    modal.style.display = "none";
+  });
+});

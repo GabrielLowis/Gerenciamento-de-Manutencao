@@ -21,7 +21,8 @@
             <section id="sectionHeader">
                 <div id="headerAllTask">
                     <h1 id="title">Suas tarefas</h1>
-                    <a href="./addTask.html?source=taskColab"><i class="bi bi-clipboard2-plus-fill"></i> Adicionar tarefa</a>
+                    <a href="./addTask.html?source=taskColab"><i class="bi bi-clipboard2-plus-fill"></i> Adicionar
+                        tarefa</a>
                     <div id="sair">
                         <a href="../index.html">
                             <h3>Sair</h3>
@@ -50,38 +51,6 @@
                         <th class="prioridade"> <i class="bi bi-star-fill"></i> Prioridade </th>
                         <th class="descricao"> <i class="bi bi-file-earmark-text"></i> Descrição</th>
                     </tr>
-                    <!-- <tr>
-                        <td class="tarefas">📺<a href="#"> Projetor com defeito</a></td>
-                        <td class="status"> <span class="fazer">A fazer </span></td>
-                        <td class="responsavel"><a href="#">Jorge - Ti</a></td>
-                        <td class="prazo"><span>21/03/2025</span></td>
-                        <td class="prioridade"><span class="alta">Alta</span></td>
-                        <td class="descricao">Aqui terá uma descrição da tarefa para o colaborador poder ler e resolver a tarefa</td>
-                    </tr> -->
-                    <!-- <tr>
-                        <td class="tarefas">🔌<a href="#"> Tomada não está funcionando</a></td>
-                        <td class="status"> <span class="andamento">Em andamento</span></td>
-                        <td class="responsavel"><a href="#">Jorge - Ti</a></td>
-                        <td class="prazo"><span>21/03/2025</span></td>
-                        <td class="prioridade"><span class="media">Média</span></td>
-                        <td class="descricao">Aqui terá uma descrição da tarefa para o colaborador poder ler e resolver a tarefa</td>
-                    </tr>
-                    <tr>
-                        <td class="tarefas">💧<a href="#"> Troca dos bebedouros</a></td>
-                        <td class="status"> <span class="concluida">Concluída</span></td>
-                        <td class="responsavel"><a href="#">Fulano</a></td>
-                        <td class="prazo"><span>21/03/2025</span></td>
-                        <td class="prioridade"><span class="baixa">Baixa</span></td>
-                        <td class="descricao">Aqui terá uma descrição da tarefa para o colaborador poder ler e resolver a tarefa</td>
-                    </tr>
-                    <tr>
-                        <td class="tarefas">🧯<a href="#"> Trocar extintores de incêndio</a></td>
-                        <td class="status"> <span class="arquivada">Arquivada</span></td>
-                        <td class="responsavel"><a href="#">Ciclano</a></td>
-                        <td class="prazo"><span>21/03/2025</span></td>
-                        <td class="prioridade"><span class="baixa">Baixa</span></td>
-                        <td class="descricao">Aqui terá uma descrição da tarefa para o colaborador poder ler e resolver a tarefa</td>
-                    </tr> -->
                 </table>
             </section>
 
@@ -99,6 +68,7 @@
     <script type="module">
         import { ipServer } from '../ipConfig.js';
         console.log("IP do Servidor:", ipServer);
+
 
         let idUser = localStorage.getItem('idUser');
 
@@ -121,8 +91,8 @@
                     }
                 })
                 .then(data => {
-                    console.log(data[0].username);
-                    const username = data[0].username;
+                    console.log(data.username);
+                    const username = data.username;
 
                     const title = document.querySelector('#title');
                     title.textContent += ` - ${username.charAt(0).toUpperCase() + username.slice(1)}`;
@@ -153,13 +123,23 @@
 
                         console.log(tarefas.length);
 
+                        function formatarData(dataISO) {
+                            const data = new Date(dataISO);
+                            const dia = String(data.getDate()).padStart(2, '0');
+                            const mes = String(data.getMonth() + 1).padStart(2, '0');
+                            const ano = data.getFullYear();
+                            return `${dia}/${mes}/${ano}`;
+                        }
+
                         tarefas.forEach(tarefa => {
                             if (tarefa.task_respon == username) {
+                                tarefa.task_prazo = formatarData(tarefa.task_prazo);
+
                                 const tasks = document.querySelector('#tasks');
                                 if (tasks) {
                                     let htmlTask = `<tr>
-                                            <td class="tarefas">📺<a href="../pages/infoTask.html?source=taskColab" onclick="storeTaskId(${tarefa.id})">${tarefa.task_title}</a></td>
-                                            <td class="status" onclick="editStatus(${tarefa.id})" > <span class="${tarefa.task_status}">${tarefa.task_status.charAt(0).toUpperCase() + tarefa.task_status.slice(1)}</span></td>
+                                            <td class="tarefas"><a href="../pages/infoTask.html?source=taskColab" onclick="storeTaskId('${tarefa._id}')">${tarefa.task_title}</a></td>
+                                            <td class="status" onclick="editStatus(${tarefa._id})" > <span class="${tarefa.task_status}">${tarefa.task_status.charAt(0).toUpperCase() + tarefa.task_status.slice(1)}</span></td>
                                             <td class="responsavel"><a href="#">${tarefa.task_respon.charAt(0).toUpperCase() + tarefa.task_respon.slice(1)}</a></td>
                                             <td class="prazo"><span>${tarefa.task_prazo}</span></td>
                                             <td class="prioridade"><span class="${tarefa.task_prior}">${tarefa.task_prior.charAt(0).toUpperCase() + tarefa.task_prior.slice(1)}</span></td>
@@ -167,7 +147,7 @@
                                         </tr>`;
                                     tasks.innerHTML += htmlTask;
 
-                                    console.log('idTask: ' + tarefa.id);
+                                    console.log('idTask: > ' + tarefa._id);
                                 }
                             }
                         });

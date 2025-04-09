@@ -157,35 +157,35 @@
     }
 
     /* Definições de largura para as colunas da tabela */
-    // .tarefas {
-    //     width: 30%;
-    //     min-width: 330px;
-    // }
+    .tarefas {
+        width: 30%;
+        min-width: 330px;
+    }
 
-    // .status {
-    //     width: 10%;
-    //     min-width: 129px;
-    // }
+    .status {
+        width: 10%;
+        min-width: 129px;
+    }
 
-    // .responsavel {
-    //     width: 10%;
-    //     min-width: 115px;
-    // }
+    .responsavel {
+        width: 10%;
+        min-width: 115px;
+    }
 
-    // .prazo {
-    //     width: 10%;
-    //     min-width: 113px;
-    // }
+    .prazo {
+        width: 10%;
+        min-width: 113px;
+    }
 
-    // .prioridade {
-    //     width: 10%;
-    //     min-width: 114px;
-    // }
+    .prioridade {
+        width: 10%;
+        min-width: 114px;
+    }
 
-    // .descricao {
-    //     width: 30%;
-    //     min-width: 337px;
-    // }
+    .descricao {
+        width: 30%;
+        min-width: 337px;
+    }
 }
 
 /* Seleciona todos os cabeçalhos <th>, exceto o primeiro e o último */
@@ -345,6 +345,30 @@
     background-color: #212121;
 }
 
+#selectOrderStatus {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 170px;
+    height: 200px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 15px;
+    z-index: 999;
+
+    span {
+        display: flex;
+        justify-content: center;
+    }
+}
+
 
 @media (max-width: 1050px) {
     #headerAllTask {
@@ -430,6 +454,31 @@
     #navAllTask{
         gap: 25px;
         margin-right: 25px;
+    }
+
+    #selectOrderStatus {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 100%;
+        height: 220px;
+        background-color: #fff;
+        border: 1px solid #ccc;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        padding: 20px;
+        border-radius: 10px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 15px;
+        z-index: 999;
+    
+        span {
+            display: flex;
+            justify-content: center;
+            cursor: pointer;
+        }
     }
 }
 
