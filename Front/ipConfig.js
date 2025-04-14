@@ -1,1 +1,1 @@
-export const ipServer = "10.116.75.54"; // Defina o IPv4 da sua internet
+export const ipServer = "192.168.4.47"; // Defina o IPv4 da sua internet

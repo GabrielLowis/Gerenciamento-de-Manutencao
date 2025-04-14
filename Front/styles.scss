@@ -136,8 +136,8 @@ $background: #e2e2e2;
     box-sizing: border-box;
 }
 
-@import "./partials/login";
-@import "./partials/taskManager";
-@import "./partials/taskQuadroManager";
-@import "./partials/addTask";
-@import "./partials/dashBoard";
+@import "./partials/login.scss";
+@import "./partials/taskManager.scss";
+@import "./partials/taskQuadroManager.scss";
+@import "./partials/addTask.scss";
+@import "./partials/dashBoard.scss";

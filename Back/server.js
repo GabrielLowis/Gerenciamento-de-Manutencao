@@ -1,363 +1,274 @@
-const express = require('express');
-const mysql = require('mysql2');
-const cors = require('cors');
+const express = require("express");
+const mongoose = require("mongoose");
+const cors = require("cors");
+const multer = require("multer");
 
-// Opções de conexão com o MySQL
-const connection = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: 'root',
-    database: 'bd_tasks'
+const app = express();
+const port = 3000;
+
+// Middleware
+app.use(express.json());
+app.use(cors());
+
+// Conectar ao MongoDB Atlas
+const uri =
+    "mongodb+srv://admin:admin@clustergdm.o3wll17.mongodb.net/?retryWrites=true&w=majority&appName=clusterGDM";
+
+mongoose
+    .connect(uri)
+    .then(() => console.log("Conectado ao MongoDB Atlas"))
+    .catch((err) => console.error("Erro ao conectar ao MongoDB Atlas", err));
+
+// Definir Schemas
+const UserSchema = new mongoose.Schema({
+    username: String,
+    passwrd: String,
+    nivel: Number,
 });
 
-const app = new express();  
-app.listen(3000, () => {
-    console.log('Servidor iniciado.');
-})
+const TaskSchema = new mongoose.Schema({
+    id_user: mongoose.Schema.Types.ObjectId,
+    task_title: String,
+    task_status: String,
+    task_prior: String,
+    task_prazo: Date,
+    task_sala: String,
+    task_respon: String,
+    task_text: String,
+    id_image: mongoose.Schema.Types.ObjectId,
+    created_at: { type: Date, default: Date.now },
+    updated_at: { type: Date, default: Date.now },
+    coment: String,
+});
 
-app.use(cors());
-app.use(express.json());
+const ImageSchema = new mongoose.Schema({
+    filename: String,
+    mimetype: String,
+    image_data: Buffer,
+});
+
+const ChamadoSchema = new mongoose.Schema({
+    id_image: mongoose.Schema.Types.ObjectId,
+    sala: String,
+    text: String,
+    created_at: { type: Date, default: Date.now },
+});
+
+// Criar modelos
+const User = mongoose.model("User", UserSchema);
+const Task = mongoose.model("Task", TaskSchema);
+const Image = mongoose.model("Image", ImageSchema);
+const Chamado = mongoose.model("Chamado", ChamadoSchema);
 
 // Rotas
-// ---------------------------------
-app.get("/", (req, res) => {
-    connection.query("SELECT COUNT(*) i FROM users", (err, results) => {
-        if (err) {
-            return res.status(500).send('MySQL Connection error');
-        }
-        res.send('MySQL Connection OK.');
-    });
+app.get("/", async (req, res) => {
+    const count = await User.countDocuments();
+    res.send("MongoDB Connection OK. Total Users: " + count);
 });
 
-
-// ---------------------------------
-app.get("/tasks", (req, res) => {
-    connection.query("SELECT * from tasks", (err, results) => {
-        if (err) {
-            return res.status(500).send('MySQL Connection error'); // Encerra a execução aqui
-        }
-        res.json(results); // Só será executado se não houver erro
-    });
+app.get("/tasks", async (req, res) => {
+    const tasks = await Task.find();
+    res.json(tasks);
 });
 
-// ---------------------------------
-app.get("/usersColab/", (req, res) => {
-    connection.query("SELECT username FROM users WHERE nivel = 2", (err, results) => {
-        if (err) {
-            return res.status(500).send('MySQL Connection error');
+// Buscar task apenas pelo id da task
+app.get("/tasks/:idTask", async (req, res) => {
+    const { idTask } = req.params;
+
+    try {
+        const task = await Task.findById(idTask);
+
+        if (!task) {
+            return res.status(404).json({ message: "Tarefa não encontrada." });
         }
-        res.json(results);
-    });
+
+        res.status(200).json(task);
+    } catch (err) {
+        console.error("Erro ao buscar tarefa:", err);
+        res.status(500).json({ message: "Erro no servidor." });
+    }
 });
 
-
-// -------------------------------------
-app.get("/users/:username", (req, res) => {
-    connection.query("SELECT id, passwrd, nivel FROM users WHERE username = ?", [req.params.username], (err, results) => {
-        if (err) {
-            return res.status(500).send('MySQL Connection error');
-        }
-        res.json(results);
-    });
+app.get("/usersColab", async (req, res) => {
+    const users = await User.find({ nivel: 2 }, "username");
+    res.json(users);
 });
 
-
-// -------------------------------------
-app.get("/user/:id", (req, res) => {
-    connection.query("SELECT id, username, passwrd FROM users WHERE id = ?", [req.params.id], (err, results) => {
-        if (err) {
-            res.send('MySQL Connection error');
-        }
-
-        res.json(results);
-    })
-});
-// -------------------------------------
-
-app.get("/user/:id/tasks/", (req, res) => {
-    connection.query("SELECT * FROM tasks WHERE id_user = ?", [req.params.id], (err, results) => {
-        if (err) {
-            res.send('MySQL Connection error');
-            console.log('erro');
-        }
-
-        res.json(results);
-    })
-});
-
-
-
-// -------------------------------------
-// app.get("/user/:nivel/tasks/", (req, res) => [
-//     connection.query("SELECT * FROM tasks WHERE nivel = ?", [req.params.nivel], (err, result) => {
-//         if (err) {
-//             res.send('MySQL Connection error');
-//             console.log('erro');
-//         }
-
-//         res.json(results);
-//     })
-// ])
-
-
-// -------------------------------------
-
-// Nova rota para pegar informações de uma tarefa de um usuário específico
-app.get("/user/:id/tasks/:taskId", (req, res) => {
-    // const userId = req.params.id;       // ID do usuário
-    const taskId = req.params.taskId;   // ID da tarefa
-
-    connection.query("SELECT * FROM tasks WHERE id = ?", [ taskId ], (err, results) => {
-            if (err) {
-                res.send('MySQL Connection error');
-                console.log('erro');
-            }
-
-            // Se não encontrar nenhuma tarefa com os IDs fornecidos
-            if (results.length === 0) {
-                return res.status(404).json({ message: "Tarefa não encontrada para este usuário" });
-            }
-
-            // Retorna os resultados como JSON para o frontend
-            res.json(results[0]); // Retorna a tarefa encontrada (apenas um resultado)
-        }
+app.get("/users/:username", async (req, res) => {
+    const user = await User.findOne(
+        { username: req.params.username },
+        "id passwrd nivel"
     );
+    res.json(user);
 });
 
-// -------------------------------------
-app.post("/tasks/updateTask", (req, res) => {
-    connection.query(
-        "UPDATE tasks SET task_title = ?, task_status = ?, task_prior = ?, task_prazo = ?, task_sala = ?, task_respon = ?, task_text = ?, id_image = ?, updated_at = NOW() WHERE id = ?",
-        [req.body.inputTitle, req.body.statusSpan, req.body.prioSpan, req.body.inputData, req.body.inputSala, req.body.inputRespon, req.body.descricao, req.body.idImage, req.body.idTask],
-        (err, results) => {
-            if (err) {
-                console.error('MySQL Connection error:', err);
-                return res.status(500).send('MySQL Connection error');
-            }
-            res.json('ok');
+app.get("/user/:id", async (req, res) => {
+    const user = await User.findById(req.params.id, "id username passwrd");
+    res.json(user);
+});
+
+app.get("/user/:id/tasks", async (req, res) => {
+    const tasks = await Task.find({ id_user: req.params.id });
+    res.json(tasks);
+});
+
+// Buscar task por idUser e idTask
+app.get("/user/:idUser/tasks/:idTask", async (req, res) => {
+    const { idUser, idTask } = req.params;
+
+    try {
+        const task = await Task.findOne({ _id: idTask, id_user: idUser });
+
+        if (!task) {
+            return res.status(404).json({ message: "Tarefa não encontrada." });
         }
-    );
+
+        res.status(200).json(task);
+    } catch (err) {
+        console.error("Erro ao buscar tarefa:", err);
+        res.status(500).json({ message: "Erro no servidor." });
+    }
 });
 
+app.post("/tasks/updateTask", async (req, res) => {
+    try {
+        const {
+            idTask,
+            inputTitle,
+            statusSpan,
+            prioSpan,
+            inputData,
+            inputSala,
+            inputRespon,
+            descricao,
+            idImage,
+        } = req.body;
 
-// -------------------------------------
-app.post("/user/:id/tasks/createTask", (req, res) => {
-    const { idUser, inputTitle, statusSpan, prioSpan, inputData, inputSala, inputRespon, descricao, imageId } = req.body;
+        const update = {
+            task_title: inputTitle,
+            task_status: statusSpan,
+            task_prior: prioSpan,
+            task_prazo: inputData,
+            task_sala: inputSala,
+            task_respon: inputRespon,
+            task_text: descricao,
+            id_image: idImage,
+            updated_at: new Date(),
+        };
 
-    // Comando SQL para inserir uma nova linha na tabela 'tasks'
-    connection.query("INSERT INTO tasks (id_user, task_title, task_status, task_prior, task_prazo, task_sala, task_respon, task_text, id_image, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())",
-        [idUser, inputTitle, statusSpan, prioSpan, inputData, inputSala, inputRespon, descricao, imageId],
-        (err, results) => {
-            if (err) {
-                console.error('MySQL Connection error:', err);
-                res.status(500).send('MySQL Connection error');
-            } else {
-                res.json({ message: 'Task criada com sucesso!', taskId: results.insertId });
-            }
-        }
-    );
+        await Task.findByIdAndUpdate(idTask, update);
+        res.status(200).json({ message: "Atualizado com sucesso" });
+    } catch (error) {
+        console.error("Erro ao atualizar tarefa:", error);
+        res.status(500).json({ error: "Erro ao atualizar tarefa" });
+    }
 });
 
-// -------------------------------------
-app.delete("/user/:id/tasks/:taskId", (req, res) => {
-    const { taskId } = req.params;
-
-    connection.query("DELETE FROM tasks WHERE id = ?", [taskId], (err, results) => {
-        if (err) {
-            console.error("Erro ao deletar a tarefa:", err);
-            res.status(500).send("Erro ao deletar a tarefa.");
-        } else if (results.affectedRows === 0) { // O affectedRows é uma propriedade do objeto results retornado pelo método query do MySQL em Node.js. Ele indica o número de linhas que foram afetadas por uma consulta SQL no banco de dados. Essa propriedade é útil para verificar o impacto de comandos como UPDATE, DELETE, ou INSERT.
-            res.status(404).send("Tarefa não encontrada.");
-        } else {
-            res.json({ message: "Tarefa deletada com sucesso!" });
-        }
-    });
+app.post("/user/:id/tasks/createTask", async (req, res) => {
+    // console.log("REQ.BODY >>>", req.body);
+    const newTask = new Task(req.body);
+    await newTask.save();
+    res.json({ message: "Task criada com sucesso!", taskId: newTask._id });
 });
 
-// -------------------------------------
-const multer = require('multer');
-const { get } = require('express/lib/response');
-const res = require('express/lib/response');
-// const path = require('path');
+app.delete("/user/:id/tasks/:taskId", async (req, res) => {
+    await Task.findByIdAndDelete(req.params.taskId);
+    res.json({ message: "Tarefa deletada com sucesso!" });
+});
 
-const storage = multer.memoryStorage(); // Usa memória em vez de salvar no disco
+const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
-// Rota para upload de imagem
-app.post('/upload-image', upload.single('image'), (req, res) => {
-    if (!req.file) {
+app.post("/upload-image", upload.single("image"), async (req, res) => {
+    if (!req.file)
         return res.status(400).json({ message: "Imagem não enviada." });
+
+    const newImage = new Image({
+        filename: req.file.originalname,
+        mimetype: req.file.mimetype,
+        image_data: req.file.buffer,
+    });
+
+    await newImage.save();
+
+    res.json({ message: "Imagem salva com sucesso!", imageId: newImage._id });
+});
+
+app.get("/getImage/:imageId", async (req, res) => {
+    const image = await Image.findById(req.params.imageId);
+    if (!image) return res.status(404).send("Imagem não encontrada");
+    res.setHeader("Content-Type", image.mimetype);
+    res.send(image.image_data);
+});
+
+app.delete("/getImage/delete/:imageId", async (req, res) => {
+    await Image.findByIdAndDelete(req.params.imageId);
+    res.json({ message: "Imagem deletada com sucesso!" });
+});
+
+app.post("/createCall", async (req, res) => {
+    const newCall = new Chamado(req.body);
+    await newCall.save();
+    res.json({ message: "Chamado criado com sucesso!" });
+});
+
+
+app.get("/calls", async (req, res) => {
+    const calls = await Chamado.find();
+    res.json(calls);
+});
+
+app.get("/call/:idCall", async (req, res) => {
+    try {
+        const call = await Chamado.findById(req.params.idCall);
+        if (!call) return res.status(404).json({ message: "Chamado não encontrado" });
+        res.json(call);
+    } catch (error) {
+        console.error("Erro ao buscar chamado:", error);
+        res.status(500).json({ message: "Erro interno no servidor" });
     }
+});
 
-    const { originalname, mimetype, buffer } = req.file;
+app.put("/call/updateCall/:id", async (req, res) => {
+    const { id } = req.params;
+    const { inputSala, descricao } = req.body;
 
-    // Salva a imagem no banco de dados
-    const query = `
-        INSERT INTO images (filename, mimetype, image_data) VALUES (?, ?, ?)`;
+    try {
+        const updated = await Chamado.findByIdAndUpdate(
+            id,
+            { sala: inputSala, text: descricao },
+            { new: true } // Retorna o objeto atualizado
+        );
 
-    connection.query(query, [originalname, mimetype, buffer], (err, results) => {
-        if (err) {
-            console.error('Erro ao salvar imagem no banco:', err);
-            return res.status(500).json({ message: 'Erro ao salvar imagem.' });
+        if (!updated) {
+            return res.status(404).json({ message: "Chamado não encontrado." });
         }
 
-        res.json({
-            message: 'Imagem salva com sucesso!',
-            imageId: results.insertId, // Retorna o ID da imagem salva
-        });
+        res.status(200).json({ message: "Chamado atualizado com sucesso!", chamado: updated });
+    } catch (err) {
+        console.error("Erro ao atualizar chamado:", err);
+        res.status(500).json({ message: "Erro interno do servidor." });
+    }
+});
+
+
+app.delete("/call/deleteCall/:idCall", async (req, res) => {
+    await Chamado.findByIdAndDelete(req.params.idCall);
+    res.json({ message: "Chamado deletado com sucesso!" });
+});
+
+app.post("/coment/:taskId", async (req, res) => {
+    await Task.findByIdAndUpdate(req.params.taskId, {
+        coment: req.body.valueComent,
     });
+    res.json("ok");
 });
 
-// -------------------------------------
-// app.post("/image/updateImage/:imageId", (req, res) => {
-//     connection.query("UPDATE images SET mimetype = ?, image_data = ?, filename = ?, WHERE id = ?", 
-//         [req.body.mimetype, req.body.image_data, req.body.idImage], (err, results) => {
-//         if (err) {
-//             res.send('MySQL Connection error');
-//             console.log('erro');
-//         }
-//     })
-// })
-
-// -------------------------------------
-app.post("/createCall", (req, res) => {
-    const { imageId, inputSala, descricao } = req.body;
-
-    connection.query("INSERT INTO chamados (id_image, sala, text, created_at) VALUES (?, ?, ?, NOW())",
-        [imageId, inputSala, descricao],
-        (err, results) => {
-            if (err) {
-                console.error('MySQL Connection error:', err);
-                res.status(500).send('MySQL Connection error');
-            } else {
-                res.json({ message: 'Chamado criado com sucesso!'});
-            }
-        }
-    );
-});
-
-// -------------------------------------
-app.get("/calls", (req, res) => {
-        connection.query("SELECT * from chamados", (err, results) => {
-            if (err) {
-                res.send('MySQL Connection error');
-            }
-            res.json(results);    
-        })
-});
-
-// -------------------------------------
-app.get("/call/:idCall", (req, res) => {
-    connection.query("SELECT * from chamados WHERE id = ?", [req.params.idCall], (err, results) => {
-        if (err) {
-           return res.send('MySQL Connection error');
-        }
-        res.json(results);
-    })
-});
-
-// -------------------------------------
-app.post("/call/updateCall", (req, res) => {
-    // console.log(req.body.idUser);
-    // console.log(req.body.idTask);
-    // console.log(req.body.inputTitle);
-    // res.send('finalizado');
-
-    connection.query("UPDATE chamados SET sala = ?, text = ? WHERE id = ?", 
-        [req.body.inputSala, req.body.descricao, req.body.idCall], (err, results) => {
-        if (err) {
-            res.send('MySQL Connection error');
-            console.log('erro');
-        }
-    })
-    
-    res.json('ok');
-});
-
-// -------------------------------------
-app.get('/getImage/:imageId', (req, res) => {
-    const { imageId } = req.params;
-
-    const query = 'SELECT mimetype, image_data FROM images WHERE id = ?';
-    connection.query(query, [imageId], (err, result) => {
-        if (err) {
-            console.error("Erro ao buscar imagem:", err);
-            return res.status(500).send("Erro no servidor");
-        }
-
-        if (result.length === 0) {
-            return res.status(404).send("Imagem não encontrada");
-        }
-
-        const { mimetype, image_data } = result[0];
-        res.setHeader('Content-Type', mimetype); // Define o tipo MIME da resposta
-        res.send(image_data); // Envia os dados da imagem como resposta
-    });
-});
-
-// -------------------------------------
-app.delete('/getImage/delete/:imageId', (req, res) => {
-    const { imageId } = req.params;
-
-    connection.query("DELETE FROM images WHERE id = ?", [imageId], (err, results) => {
-        if (err) {
-            console.error("Erro ao deletar a imagem:", err);
-            res.status(500).send("Erro ao deletar a imagem.");
-        } else if (results.affectedRows === 0) { // O affectedRows é uma propriedade do objeto results retornado pelo método query do MySQL em Node.js. Ele indica o número de linhas que foram afetadas por uma consulta SQL no banco de dados. Essa propriedade é útil para verificar o impacto de comandos como UPDATE, DELETE, ou INSERT.
-            res.status(404).send("Imagem não encontrada.");
-        } else {
-            res.json({ message: "Imagem deletada com sucesso!" });
-        }
-    });
-});
-
-// -------------------------------------
-app.delete("/call/deleteCall/:idCall", (req, res) => {
-    const { idCall } = req.params;
-
-    connection.query("DELETE FROM chamados WHERE id = ?", [idCall], (err, results) => {
-        if (err) {
-            console.error("Erro ao deletar o chamado:", err);
-            res.status(500).send("Erro ao deletar o chamado.");
-        } else if (results.affectedRows === 0) { // O affectedRows é uma propriedade do objeto results retornado pelo método query do MySQL em Node.js. Ele indica o número de linhas que foram afetadas por uma consulta SQL no banco de dados. Essa propriedade é útil para verificar o impacto de comandos como UPDATE, DELETE, ou INSERT.
-            res.status(404).send("Chamado não encontrada.");
-        } else {
-            res.json({ message: "Chamado deletada com sucesso!" });
-        }
-    });
-});
-
-// -------------------------------------
-app.post("/coment/:taskId", (req, res) => {
-    // const { valueComent, idTask } = req.body;
-    
-    connection.query("UPDATE tasks SET coment = ? WHERE id = ?",
-        [req.body.valueComent, req.body.idTask], (err, results) => {
-            if (err) {
-                res.send('MySQL Connection error');
-                console.log('erro');
-                
-            }
-        })
-});
-
-
-
-// app.post("/call/updateCall", (req, res) => {
-//     // console.log(req.body.idUser);
-//     // console.log(req.body.idTask);
-//     // console.log(req.body.inputTitle);
-//     // res.send('finalizado');
-
-//     connection.query("UPDATE chamados SET sala = ?, text = ? WHERE id = ?", 
-//         [req.body.inputSala, req.body.descricao, req.body.idCall], (err, results) => {
-//         if (err) {
-//             res.send('MySQL Connection error');
-//             console.log('erro');
-//         }
-//     })
-    
-//     res.json('ok');
+// Iniciar o servidor
+// app.listen(port, () => {
+//     console.log(`Servidor rodando na porta ${port}`);
 // });
 
-
+app.listen(port, "0.0.0.0", () => {
+    console.log(`Servidor rodando na porta ${port}`);
+});

@@ -52,14 +52,27 @@ export function getUserTask() {
 
                 console.log(tarefas.length);
 
-
+                function formatarData(dataISO) {
+                    const data = new Date(dataISO);
+                    const dia = String(data.getDate()).padStart(2, '0');
+                    const mes = String(data.getMonth() + 1).padStart(2, '0');
+                    const ano = data.getFullYear();
+                    return `${dia}/${mes}/${ano}`;
+                }
+                
+                
+                
                 tarefas.forEach(tarefa => {
-
+                    
+                    tarefa.task_prazo = formatarData(tarefa.task_prazo);
+                    console.log("ID DA TAREFA >> " + tarefa._id);
+                    
+                    
                     const tbody = document.querySelector('#tbody');
                     if (tbody) {
                         let htmlTask = `<tr>
-                                        <td class="tarefas"><a href="../pages/infoTask.html?source=taskManager" onclick="storeTaskId(${tarefa.id})">${tarefa.task_title}</a></td>
-                                        <td class="status" onclick="editStatus(${tarefa.id})" > <span class="${tarefa.task_status}">${tarefa.task_status.charAt(0).toUpperCase() + tarefa.task_status.slice(1)}</span></td>
+                                        <td class="tarefas"><a href="../pages/infoTask.html?source=taskManager" onclick="storeTaskId('${tarefa._id}')">${tarefa.task_title}</a></td>
+                                        <td class="status" onclick="editStatus(${tarefa._id})" > <span class="${tarefa.task_status}">${tarefa.task_status.charAt(0).toUpperCase() + tarefa.task_status.slice(1)}</span></td>
                                         <td class="responsavel"><a href="#">${tarefa.task_respon.charAt(0).toUpperCase() + tarefa.task_respon.slice(1)}</a></td>
                                         <td class="prazo"><span class="spanPrazo">${tarefa.task_prazo}</span></td>
                                         <td class="prioridade"><span class="${tarefa.task_prior}">${tarefa.task_prior.charAt(0).toUpperCase() + tarefa.task_prior.slice(1)}</span></td>
@@ -67,7 +80,7 @@ export function getUserTask() {
                                     </tr>`;
                                     tbody.innerHTML += htmlTask;
 
-                        console.log('idTask: ' + tarefa.id);
+                        console.log('idTask: ' + tarefa._id);
                     }
 
 
@@ -76,7 +89,7 @@ export function getUserTask() {
                         if (tarefa.task_status === "a fazer") {
                             let htmlTaskQuadroFazer = `
                                 <div class="taskFazer">
-                                    <h2 class="tarefas"><a href="../pages/infoTask.html?source=taskQuadroManager" onclick="storeTaskId(${tarefa.id})">${tarefa.task_title}</a></h2>
+                                    <h2 class="tarefas"><a href="../pages/infoTask.html?source=taskQuadroManager" onclick="storeTaskId('${tarefa._id}')">${tarefa.task_title}</a></h2>
                                     <h2 class="responsavel"><a href="#">${tarefa.task_respon.charAt(0).toUpperCase() + tarefa.task_respon.slice(1)}</a></h2>
                                     <span class="${tarefa.task_prior}">${tarefa.task_prior.charAt(0).toUpperCase() + tarefa.task_prior.slice(1)}</span>
                                 </div>
@@ -97,7 +110,7 @@ export function getUserTask() {
                         if (tarefa.task_status === 'em andamento') {
                             let htmlTaskQuadroAndamento = `
                                 <div class="taskAndamento">
-                                    <h2 class="tarefas"><a href="../pages/infoTask.html?source=taskQuadroManager" onclick="storeTaskId(${tarefa.id})">${tarefa.task_title}</a></h2>
+                                    <h2 class="tarefas"><a href="../pages/infoTask.html?source=taskQuadroManager" onclick="storeTaskId('${tarefa._id}')">${tarefa.task_title}</a></h2>
                                     <h2 class="responsavel"><a href="#">${tarefa.task_respon.charAt(0).toUpperCase() + tarefa.task_respon.slice(1)}</a></h2>
                                     <span class="${tarefa.task_prior}">${tarefa.task_prior.charAt(0).toUpperCase() + tarefa.task_prior.slice(1)}</span>
                                 </div>
@@ -118,7 +131,7 @@ export function getUserTask() {
                         if (tarefa.task_status === 'concluida') {
                             let htmlTaskQuadroConcluido = `
                                 <div class="taskConcluida">
-                                    <h2 class="tarefas"><a href="../pages/infoTask.html?source=taskQuadroManager" onclick="storeTaskId(${tarefa.id})">${tarefa.task_title}</a></h2>
+                                    <h2 class="tarefas"><a href="../pages/infoTask.html?source=taskQuadroManager" onclick="storeTaskId('${tarefa._id}')">${tarefa.task_title}</a></h2>
                                     <h2 class="responsavel"><a href="#">${tarefa.task_respon.charAt(0).toUpperCase() + tarefa.task_respon.slice(1)}</a></h2>
                                     <span class="${tarefa.task_prior}">${tarefa.task_prior.charAt(0).toUpperCase() + tarefa.task_prior.slice(1)}</span>
                                 </div>
@@ -138,7 +151,7 @@ export function getUserTask() {
                         if (tarefa.task_status === 'arquivada') {
                             let htmlTaskQuadroArquivado = `
                                 <div class="taskArquivada">
-                                    <h2 class="tarefas"><a href="../pages/infoTask.html?source=taskQuadroManager" onclick="storeTaskId(${tarefa.id})">${tarefa.task_title}</a></h2>
+                                    <h2 class="tarefas"><a href="../pages/infoTask.html?source=taskQuadroManager" onclick="storeTaskId('${tarefa._id}')">${tarefa.task_title}</a></h2>
                                     <h2 class="responsavel"><a href="#">${tarefa.task_respon.charAt(0).toUpperCase() + tarefa.task_respon.slice(1)}</a></h2>
                                       <span class="${tarefa.task_prior}">${tarefa.task_prior.charAt(0).toUpperCase() + tarefa.task_prior.slice(1)}</span>
                                 </div>

@@ -91,7 +91,7 @@
             <a id="addTaskAdicionar" style="cursor: pointer;">Adicionar</a>
         </main>
     </section>
-    
+
 
     <script>
         document.addEventListener("DOMContentLoaded", () => {
@@ -109,33 +109,6 @@
             }
         });
     </script>
-
-    <!-- <script>
-        // Seleciona a imagem e o input file
-        const img = document.getElementById("imgUpload");
-        const fileInput = document.getElementById("fileInput");
-
-        // Adiciona um evento de clique à imagem
-        img.addEventListener("click", () => {
-            fileInput.click(); // Simula o clique no input file
-        });
-
-        // Adiciona um evento ao input file para alterar a imagem
-        fileInput.addEventListener("change", (event) => {
-            const file = event.target.files[0]; // Obtém o arquivo selecionado
-            if (file) {
-                const reader = new FileReader();
-
-                // Quando o arquivo for carregado, altera o src da imagem
-                reader.onload = (e) => {
-                    img.src = e.target.result;
-                };
-
-                reader.readAsDataURL(file); // Lê o arquivo como uma URL base64
-            }
-        });
-
-    </script> -->
 
     <script>
         const iconSelect = document.querySelector("#toggleSelect");
@@ -258,6 +231,7 @@
     <script type="module">
         import { ipServer } from '../ipConfig.js';
         console.log("IP do Servidor:", ipServer);
+
         const selectRespon = document.querySelector("#selectRespon");
         const inputRespon = document.getElementById("inputRespon");
 
@@ -306,76 +280,52 @@
     <script type="module">
         import { ipServer } from '../ipConfig.js';
         console.log("IP do Servidor:", ipServer);
+
         // Obtendo os parâmetros da URL
         const urlParams = new URLSearchParams(window.location.search);
 
-        // Verifica se o parâmetro 'source' tem o valor 'openCalls'
+        // Verifica se o parâmetro 'source' tem o valor 'infoChamado'
         if (urlParams.get('source') === 'infoChamado') {
             callToTask();
         }
 
-        function callToTask() {
+        async function callToTask() {
             console.log("Usuário veio de infoCall!");
 
             const idCall = localStorage.getItem('idCall');
-            console.log(idCall);
+            console.log("ID do chamado:", idCall);
 
-            fetch(`http://${ipServer}:3000/call/${idCall}`)
-                .then(response => {
-                    if (response.status === 200) {
-                        return response.json(); // Retorna o JSON para a próxima then
-                    } else {
-                        console.error('Erro na resposta da API:', response.status);
-                        throw new Error('Erro ao buscar dados'); // Lança erro para ser tratado no catch
-                    }
-                })
-                .then(call => {
-                    if (call.length === 0) {
-                        console.log('Não existem Chamados');
-                    } else {
-                        const inputSala = document.querySelector("#inputSala");
-                        const descricao = document.getElementById('descricao');
+            try {
+                const response = await fetch(`http://${ipServer}:3000/call/${idCall}`);
+                if (!response.ok) throw new Error(`Erro na resposta da API: ${response.status}`);
 
-                        inputSala.value = call[0].sala;
-                        descricao.value = call[0].text;
+                const call = await response.json();
 
-                        const idImage = call[0].id_image;
+                const inputSala = document.querySelector("#inputSala");
+                const descricao = document.getElementById('descricao');
 
-                        localStorage.setItem("idImage", idImage);
+                inputSala.value = call.sala;
+                descricao.value = call.text;
 
-                        console.log('IDIMG:' + idImage);
+                const idImage = call.id_image;
+                localStorage.setItem("idImage", idImage);
+                console.log('ID da imagem:', idImage);
 
-                        // localStorage.setItem('idImage', idImage);
+                // Buscar a imagem
+                const imageResponse = await fetch(`http://${ipServer}:3000/getImage/${idImage}`);
+                if (!imageResponse.ok) throw new Error("Erro ao buscar a imagem");
 
+                const blob = await imageResponse.blob();
+                const url = URL.createObjectURL(blob);
+                const imgTag = document.querySelector("#imgUpload");
+                imgTag.src = url;
 
-
-                        fetch(`http://${ipServer}:3000/getImage/${call[0].id_image}`)
-                            .then(response => {
-                                if (response.ok) {
-                                    return response.blob(); // Obtém a imagem como um Blob
-                                } else {
-                                    throw new Error("Erro ao buscar a imagem");
-                                }
-                            })
-                            .then(blob => {
-                                const url = URL.createObjectURL(blob); // Cria uma URL para o Blob
-                                const imgTag = document.querySelector("#imgUpload");
-                                imgTag.src = url; // Define o src da tag <img>
-
-                            })
-                            .catch(error => {
-                                console.error("Erro ao carregar a imagem:", error);
-                            });
-
-                        // Outros campos do chamado podem ser usados aqui
-                        // {call[0].id_image}, {call[0].sala}, {call[0].text}, etc.
-                    }
-                })
-                .catch(error => {
-                    console.error('Erro ao processar os chamados:', error);
-                });
+            } catch (error) {
+                console.error('Erro ao processar os dados:', error);
+            }
         }
     </script>
+
 </body>
 
 </html>

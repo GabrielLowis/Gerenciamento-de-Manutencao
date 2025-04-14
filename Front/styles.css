@@ -365,6 +365,30 @@ header img {
 #tableTitle th:not(:last-child) {
   border-right: 2px solid #676767;
 }
+#tableTitle .tarefas {
+  width: 30%;
+  min-width: 330px;
+}
+#tableTitle .status {
+  width: 10%;
+  min-width: 129px;
+}
+#tableTitle .responsavel {
+  width: 10%;
+  min-width: 115px;
+}
+#tableTitle .prazo {
+  width: 10%;
+  min-width: 113px;
+}
+#tableTitle .prioridade {
+  width: 10%;
+  min-width: 114px;
+}
+#tableTitle .descricao {
+  width: 30%;
+  min-width: 337px;
+}
 
 /* Seleciona todos os cabeçalhos <th>, exceto o primeiro e o último */
 #tableTasks tr th:not(:first-child):not(:last-child) {
@@ -1425,12 +1449,14 @@ span.arquivada {
   font-family: "Poppins";
   font-weight: 700;
   font-style: italic;
+  font-size: 16px;
+  margin-left: 5px;
 }
 #columnThree #tasksCalendar #calendar #weekdays {
   background-color: black;
   display: flex;
   width: 100%;
-  height: 25px;
+  height: 20px;
   justify-content: space-evenly;
   align-items: center;
   font-family: "Open Sans";
@@ -1541,14 +1567,14 @@ span.arquivada {
 #days {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  gap: 5px;
+  gap: 0px;
   margin-top: 10px;
 }
 
 .day,
 .empty-day {
-  width: 40px;
-  height: 40px;
+  width: 35px !important;
+  height: 35px;
   display: flex;
   align-items: center;
   justify-content: center;

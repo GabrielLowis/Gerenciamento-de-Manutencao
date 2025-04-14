@@ -100,6 +100,13 @@
     </section>
 
     <script>
+        function storeTaskId(id) {
+            console.log("Armazenando ID da tarefa: ", id); // Verifica se o ID está sendo passado corretamente
+            localStorage.setItem('taskId', id);
+        }
+    </script>
+
+    <script>
         // Adiciona o evento de clique ao link
         const link = document.getElementById('addTaskAdicionar');
         link.addEventListener('click', (e) => {
