@@ -11,8 +11,9 @@ Este projeto visa fornecer uma interface intuitiva para o acompanhamento e regis
 - **HTML5**: Estruturação das páginas web.
 - **CSS3/SCSS**: Estilização e design responsivo.
 - **JavaScript**: Funcionalidades interativas no front-end.
-- **PHP**: Lógica de back-end e comunicação com o banco de dados.
-- **MySQL**: Banco de dados para armazenamento das informações.
+- **Node / Express**: Lógica de back-end e comunicação com o banco de dados.
+- **MongoDB**: Banco de dados para armazenamento das informações.
+- **ApexCharts.js**: Criação de gráficos para uma dashboard.
 
 ## Funcionalidades
 
@@ -21,6 +22,7 @@ Este projeto visa fornecer uma interface intuitiva para o acompanhamento e regis
 - **Solicitação de Manutenção**: Usuários podem abrir solicitações de manutenção que são direcionadas aos técnicos responsáveis.
 - **Acompanhamento de Status**: Visualização do progresso das manutenções em andamento.
 - **Relatórios**: Geração de relatórios sobre manutenções realizadas, pendentes e estatísticas relevantes.
+- **DashBoards**: Geração de Dashboards sobre desempenho e gerencimento de tasks. 
 
 ## Instalação
 
